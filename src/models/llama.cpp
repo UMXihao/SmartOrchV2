@@ -20,6 +20,7 @@ llm_build_llama::llm_build_llama(const llama_model & model, const llm_graph_para
 
     ggml_tensor * inp_out_ids = build_inp_out_ids();
 
+    // Note(Sean): Here can Skip calculations for the specified layer.
     for (int il = 0; il < n_layer; ++il) {
         ggml_tensor * inpSA = inpL;
 
