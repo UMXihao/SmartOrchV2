@@ -10,6 +10,12 @@
 #include <float.h>
 #include <algorithm>
 
+#ifdef LLAMA_MOE_STATS
+#include <inttypes.h>
+#include <pthread.h>
+#include <string>
+#endif // LLAMA_MOE_STATS
+
 // ggml_compute_forward_dup
 
 static void ggml_compute_forward_dup_same_cont(
@@ -7662,6 +7668,138 @@ void ggml_compute_forward_timestep_embedding(
     }
 }
 
+#ifdef LLAMA_MOE_STATS
+static pthread_mutex_t g_print_mtx = PTHREAD_MUTEX_INITIALIZER;
+
+// 将文件的每一行解析为数字；空行或非数字行按 0 处理
+static std::vector<long long> read_counts_from_file(const char* filename) {
+    std::vector<long long> counts;
+    counts.reserve(64);
+
+    FILE* fp = std::fopen(filename, "r");
+    if (!fp) {
+        // 文件可能刚被 "a" 创建但此处打开失败（权限等问题），上层处理
+        return counts;
+    }
+
+    // 读取行缓冲，可根据需要增大
+    const size_t BUF_SIZE = 64;
+    char buf[BUF_SIZE];
+
+    while (std::fgets(buf, BUF_SIZE, fp)) {
+        // 跳过前导空白
+        char* p = buf;
+        while (*p && std::isspace(static_cast<unsigned char>(*p))) {
+            ++p;
+        }
+
+        errno = 0;
+        char* end = nullptr;
+        long long val = std::strtoll(p, &end, 10);
+
+        // 若没有任何数字或溢出等，按 0
+        if (p == end || errno == ERANGE) {
+            val = 0;
+        }
+        counts.push_back(val);
+    }
+
+    std::fclose(fp);
+    return counts;
+}
+
+static bool write_counts_to_file(const char* filename, const std::vector<long long>& counts) {
+    FILE * fp = std::fopen(filename, "w");  // 覆盖写入
+    if (!fp) {
+        return false;
+    }
+
+    for (const long long count : counts) {
+        // 每行输出一个整数
+        if (std::fprintf(fp, "%lld\n", count) < 0) {
+            std::fclose(fp);
+            return false;
+        }
+    }
+    std::fclose(fp);
+    return true;
+}
+
+/**
+ * 更新文件：对 dst_data 中的每个整数 n，将文件的第 n 行数值 +1。
+ * 行计数从 1 开始；若不存在第 n 行则补零。
+ * 非数字行/空行按 0 处理。
+ */
+static bool update_file_counts(const char* filename, const int32_t *dst_data) {
+    // 1) 用 "a" 保证文件存在（若不存在则创建），然后关闭
+    {
+        FILE* fp = std::fopen(filename, "a");
+        if (!fp) {
+            std::perror("fopen(\"a\") failed");
+            return false;
+        }
+        std::fclose(fp);
+    }
+
+    std::vector<long long> counts = read_counts_from_file(filename);
+
+
+    // 3) 找到需要的最大行号（1-based）
+    int max_n = 0;
+    for (int j = 0; j < 6; ++j) {
+        int n = dst_data[j];
+        if (n > max_n) max_n = n;
+    }
+    if (max_n > 0) {
+        // 扩容到至少 max_n 行（1-based -> size = max_n）
+        if (counts.size() < static_cast<size_t>(max_n)) {
+            counts.resize(static_cast<size_t>(max_n), 0LL);
+        }
+    }
+
+    for (int64_t j = 0; j < 6; j++) {
+        int n = dst_data[j];
+        if (n <= 0) {
+            // 非正行号不合法，按约定忽略
+            continue;
+        }
+        size_t idx = static_cast<size_t>(n - 1);
+        counts[idx] += 1;
+    }
+
+    // 5) 用 fprintf 整体写回文件
+    if (!write_counts_to_file(filename, counts)) {
+        std::perror("write_counts_to_file failed");
+        return false;
+    }
+    return true;
+}
+
+static void print_row_locked(const int32_t *dst_data, const int64_t nr, const char* name) {
+    pthread_mutex_lock(&g_print_mtx);
+    // count++;
+    // printf("count %" PRId64 ": ", count);
+    // FILE* fp;
+    char filename[256];
+    if (nr > 1) {
+        std::snprintf(filename, sizeof(filename), "prefill_%s.txt", name);
+        // fp = fopen(filename, "a");
+    } else {
+        std::snprintf(filename, sizeof(filename), "decode_%s.txt", name);
+        // fp = fopen(filename, "a");
+    }
+
+    update_file_counts(filename, dst_data);
+
+    // for (int64_t j = 0; j < 6; j++) {
+    //     // printf("%" PRId32 " ", dst_data[j]);
+    //     fprintf(fp, "%" PRId32 " ", dst_data[j]);
+    // }
+    // fprintf(fp, "\n");
+    pthread_mutex_unlock(&g_print_mtx);
+}
+#endif // LLAMA_MOE_STATS
+
 // ggml_compute_forward_argsort
 
 static void ggml_compute_forward_argsort_f32(
@@ -7700,6 +7838,14 @@ static void ggml_compute_forward_argsort_f32(
                 }
             }
         }
+#ifdef LLAMA_MOE_STATS
+        print_row_locked(dst_data, nr, dst->name);
+        // printf("nr %ld: ", i);
+        // for (int64_t j = 0; j < ne0; j++) {
+        //     printf("%d ", dst_data[j]);
+        // }
+        // printf("\n");
+#endif // LLAMA_MOE_STATS
     }
 }
 

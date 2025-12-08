@@ -22,3 +22,28 @@ The script is retained as follows:
 : llama-quantize
 : llama-server
 : llama-simple
+
+# 11-26-2025
+
+## Debug-CUDA
+
+1. Settings | Build, Execution, Deployment | CMake
+2. CMake options: -DGGML_CUDA=ON
+3. Re-build
+
+## Run a MoE LLM and Skip Computing
+
+DeepSeek-R1-Distill-Qwen-7B arch-name: LLM_ARCH_QWEN2 is a dense model.
+
+DeepSeek-Coder-V2-Lite-Instruct arch-name: LLM_ARCH_DEEPSEEK2 is a MoE model.
+64 Experts, use 6 experts.
+
+
+## LLAMA_MOE_STATS only supports CPU backend.
+```
+cmake -B build \
+-DCMAKE_C_FLAGS="-DLLAMA_MOE_STATS" \
+-DCMAKE_CXX_FLAGS="-DLLAMA_MOE_STATS"
+
+cmake --build build --config Release -j 8
+```
