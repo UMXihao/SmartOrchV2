@@ -51,3 +51,14 @@ print(result)
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"requests: {elapsed_time:.2f} seconds")
+
+'''
+./build/bin/llama-server -m /data/DeepSeek-Coder-V2-Lite-Instruct-IQ2_XS.gguf -ngl 33
+
+squad-validation:
+{'exact_match': 1.4001892147587511, 'f1': 9.460719074946544}
+requests: 6696.57 seconds
+
+{'exact_match': 3.0, 'f1': 10.137294917520338}
+requests: 2877.42 seconds
+'''

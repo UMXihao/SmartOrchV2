@@ -7867,6 +7867,41 @@ void ggml_compute_forward_argsort(
     }
 }
 
+void ggml_compute_forward_gather(
+    const ggml_compute_params * params,
+    ggml_tensor * dst) {
+    const ggml_tensor * src0 = dst->src[0];
+
+    GGML_TENSOR_UNARY_OP_LOCALS
+
+    GGML_ASSERT(nb0 == sizeof(float));
+
+    int32_t* expert_ids = dst->op_params;
+
+    const int ith = params->ith;
+    const int nth = params->nth;
+
+    const int64_t nr = ggml_nrows(src0);
+
+    for (int64_t i = ith; i < nr; i += nth) {
+        int32_t * dst_data = (int32_t *)((char *) dst->data + i*nb1);
+
+        for (int64_t j = 0; j < ne0; j++) {
+            dst_data[j] = j;
+        }
+
+        int count = 0;
+        for (int64_t j = 0; j < ne0; j++) {
+            if (dst_data[j] == expert_ids[count]) {
+                int32_t tmp = dst_data[j];
+                dst_data[j] = dst_data[count];
+                dst_data[count] = tmp;
+                count++;
+            }
+        }
+    }
+}
+
 // ggml_compute_forward_flash_attn_ext
 
 static void ggml_compute_forward_flash_attn_ext_f16_one_chunk(

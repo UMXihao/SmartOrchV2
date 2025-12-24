@@ -530,6 +530,7 @@ extern "C" {
         GGML_OP_TIMESTEP_EMBEDDING,
         GGML_OP_ARGSORT,
         GGML_OP_LEAKY_RELU,
+        GGML_OP_GATHER,
 
         GGML_OP_FLASH_ATTN_EXT,
         GGML_OP_FLASH_ATTN_BACK,
@@ -2218,6 +2219,12 @@ extern "C" {
     GGML_API struct ggml_tensor * ggml_top_k(
             struct ggml_context * ctx,
             struct ggml_tensor  * a,
+            int                   k);
+
+    GGML_API struct ggml_tensor * ggml_top_k_select(
+            struct ggml_context * ctx,
+            struct ggml_tensor  * a,
+            const int32_t       * expert_ids,
             int                   k);
 
 #define GGML_KQ_MASK_PAD 64

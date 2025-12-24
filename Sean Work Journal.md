@@ -47,3 +47,17 @@ cmake -B build \
 
 cmake --build build --config Release -j 8
 ```
+
+# 12-23-2025
+## Clion Compile Parameters
+-DCMAKE_C_FLAGS="-DLLAMA_MOE_STATS" -DCMAKE_CXX_FLAGS="-DLLAMA_MOE_STATS"
+
+-DGGML_CUDA=ON -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc
+
+## HumanEval(Python) Evaluation Exception
+read time out
+
+# 12-24-2025
+## Specific experts for the task
+
+Implementing index passing using op_params
