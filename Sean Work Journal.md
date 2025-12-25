@@ -61,3 +61,5 @@ read time out
 ## Specific experts for the task
 
 Implementing index passing using op_params
+
+To solve the timeout exception, increase timeout of human_eval.

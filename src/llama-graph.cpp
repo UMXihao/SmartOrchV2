@@ -979,9 +979,9 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     }
 
     // select experts
-    // ggml_tensor * selected_experts = ggml_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
-    const int32_t expert_ids[] = {8, 57, 43, 7, 4, 20};
-    ggml_tensor * selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
+    ggml_tensor * selected_experts = ggml_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
+    // const int32_t expert_ids[] = {8, 57, 43, 7, 4, 20};
+    // ggml_tensor * selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
     cb(selected_experts->src[0], "ffn_moe_argsort", il);
     cb(selected_experts, "ffn_moe_topk", il);
 
