@@ -133,6 +133,36 @@ static __global__ void k_argsort_f32_i32(const float * x, int * dst, const int n
     }
 }
 
+template<ggml_sort_order order>
+static __global__ void k_gather_f32_i32(const float * x, int * dst, int * expert_ids, const int ncols, const int nrows) {
+    // bitonic sort
+    int col = threadIdx.x;
+    int row = blockIdx.x;
+
+    extern __shared__ int dst_row[];
+
+    // initialize indices
+    dst_row[col] = col;
+
+    __syncthreads();
+
+    for (int64_t i = col; i < nrows; i += row) {
+        int count = 0;
+        for (int64_t j = 0; j < ncols; j++) {
+            if (dst_row[j] == expert_ids[count]) {
+                ggml_cuda_swap(dst_row[j], dst_row[count]);
+                count++;
+            }
+            __syncthreads();
+        }
+    }
+
+    // copy the result to dst without the padding
+    if (col < ncols) {
+        dst[row * ncols + col] = dst_row[col];
+    }
+}
+
 static int next_power_of_2(int x) {
     int n = 1;
     while (n < x) {
@@ -197,4 +227,28 @@ void ggml_cuda_op_argsort(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {
 #else
     argsort_f32_i32_cuda_bitonic(src0_d, (int *) dst_d, ncols, nrows, order, stream);
 #endif
+}
+
+void ggml_cuda_op_gather(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {
+    const ggml_tensor * src0 = dst->src[0];
+    const float * src0_d = (const float *)src0->data;
+    float * dst_d = (float *)dst->data;
+    int* expert_ids = (int *)dst->op_params;
+    cudaStream_t stream = ctx.stream();
+
+    GGML_ASSERT(src0->type == GGML_TYPE_F32);
+    GGML_ASSERT( dst->type == GGML_TYPE_I32);
+    GGML_ASSERT(ggml_is_contiguous(src0));
+
+    const int64_t ncols = src0->ne[0];
+    const int64_t nrows = ggml_nrows(src0);
+
+    const int ncols_pad = next_power_of_2(ncols);
+
+    const dim3 block_dims(ncols_pad, 1, 1);
+    const dim3 block_nums(nrows, 1, 1);
+    const size_t shared_mem = ncols_pad * sizeof(int);
+
+    k_gather_f32_i32<GGML_SORT_ORDER_DESC>
+            <<<block_nums, block_dims, shared_mem, stream>>>(src0_d, (int *)dst_d, expert_ids, ncols, nrows);
 }
