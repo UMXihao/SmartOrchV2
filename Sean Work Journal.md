@@ -58,8 +58,10 @@ cmake --build build --config Release -j 8
 read time out
 
 # 12-24-2025
-## Specific experts for the task
+## [CPU] Specific experts for the task
 
 Implementing index passing using op_params
 
 To solve the timeout exception, increase timeout of human_eval.
+
+## [CUDA] Specific experts for the task
