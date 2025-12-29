@@ -37,6 +37,10 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
     ggml_tensor * inp_out_ids = build_inp_out_ids();
 
     for (int il = 0; il < n_layer; ++il) {
+        if (il >= 14 && il != n_layer - 1) {
+            continue;
+        }
+
         ggml_tensor * inpSA = inpL;
 
         // norm

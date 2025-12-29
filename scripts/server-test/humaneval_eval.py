@@ -191,5 +191,5 @@ Raw generations saved  : humaneval_predictions.jsonl
 
 # python humaneval_eval.py --num-tasks 100 --num-samples-per-task 1 --k 1  --n-predict 256 --temperature 0.2 --top-p 0.95
 
-# python humaneval_eval.py --num-tasks 164 --num-samples-per-task 10 --k 1 10
+# python humaneval_eval.py --num-tasks 100 --num-samples-per-task 10 --k 1 10
 

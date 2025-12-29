@@ -48,7 +48,7 @@ n_ok = 0
 n_fail = 0
 
 start_time = time.time()
-for i in tqdm(range(100)):
+for i in tqdm(range(1000)):
     # for i in tqdm(range(len(dataset))):
 
     ex = dataset[i]
@@ -84,7 +84,7 @@ for i in tqdm(range(100)):
         n_ok += 1
 
 
-result = n_ok/100
+result = n_ok/1000
 print("acc: ", result)
 end_time = time.time()
 elapsed_time = end_time - start_time

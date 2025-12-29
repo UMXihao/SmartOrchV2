@@ -69,3 +69,7 @@ To solve the timeout exception, increase timeout of human_eval.
 # 12-29-2025
 ## Testing a new sentiment dataset
 We test with a new sentiment categorical dataset IMDB, but the analysis time using CPU is still very long.
+
+## Sparsity: Early Exit 
+Skipping a specific layer requires modifying the computation graph and loading model parameters. 
+For DeepSeekv2, the last layer cannot be skipped; otherwise, the output cannot be built.
