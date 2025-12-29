@@ -65,3 +65,7 @@ Implementing index passing using op_params
 To solve the timeout exception, increase timeout of human_eval.
 
 ## [CUDA] Specific experts for the task
+
+# 12-29-2025
+## Testing a new sentiment dataset
+We test with a new sentiment categorical dataset IMDB, but the analysis time using CPU is still very long.
