@@ -26,8 +26,8 @@ predictions = []
 references = []
 
 start_time = time.time()
-for i in tqdm(range(100)):
-    # for i in tqdm(range(len(dataset))):
+for i in tqdm(range(1000)):
+#for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]
     answers = squad_val[i]["answers"]
