@@ -979,6 +979,25 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     }
 
     // select experts
+    // ggml_tensor * selected_experts;
+    // if (il == 0 || il > 25) {
+    //     selected_experts = ggml_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
+    // } else {
+    //     int32_t arr[25][6] = {
+    //         {8, 57, 43, 7, 4, 20},{63, 24, 46, 62, 15, 8},{50, 22, 38, 60, 2, 7},{29, 34, 1, 58, 45, 9},{42, 14, 5, 41, 30, 9},
+    //         {33, 43, 56, 61, 40, 29},{19, 34, 8, 41, 62, 50},{17, 7, 39, 33, 46, 4},{17, 57, 43, 46, 30, 4},{33, 5, 4, 19, 59, 55},
+    //         {41, 16, 60, 40, 57, 33},{13, 19, 16, 31, 49, 28},{28, 5, 22, 18, 63, 50},{59, 36, 63, 37, 51, 30},{7, 56, 19, 26, 37, 33},
+    //         {29, 14, 24, 36, 30, 41},{12, 14, 45, 61, 35, 25},{23, 2, 46, 22, 13, 37},{53, 4, 9, 19, 39, 47},{31, 5, 53, 41, 4, 12},
+    //         {43, 16, 30, 46, 61, 12},{8, 57, 44, 61, 10, 21},{21, 62, 46, 23, 6, 57},{20, 26, 56, 24, 61, 5},{54, 1, 6, 45, 31, 29}
+    //     };
+    //     int32_t expert_ids[6];
+    //     for (int i = 0; i < 6; ++i) {
+    //         expert_ids[i] = arr[il - 1][i];
+    //     }
+    //
+    //     selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
+    // }
+
     ggml_tensor * selected_experts = ggml_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
     // const int32_t expert_ids[] = {8, 57, 43, 7, 4, 20};
     // ggml_tensor * selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
