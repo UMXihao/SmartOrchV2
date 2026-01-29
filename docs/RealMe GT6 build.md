@@ -25,6 +25,9 @@ Set env var.
 
 `$ export ANDROID_NDK={ANDROID_NDK_PATH}`
 
+`$ export ANDROID_NDK=/home/lili-5090/Sean/android-ndk-r27d
+`
+
 ```
 $ cmake \
 -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
@@ -61,3 +64,35 @@ $ cd /data/local/tmp/smartorchv2/install
 $ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}"
 ```
 
+GPU Compile
+
+未添加OpenCL ~/android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/
+已添加OpenCL ~/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android
+
+
+
+
+cmake --build build-android --config Release -j 22
+
+```
+$ cmake .. \
+-DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
+-DANDROID_ABI=arm64-v8a \
+-DANDROID_PLATFORM=android-28 \
+-DBUILD_SHARED_LIBS=OFF \
+-DLLAMA_CURL=OFF \
+-DGGML_OPENCL=ON \
+-DGGML_OPENMP=OFF 
+
+$ cd ..
+
+$ mkdir install
+
+$ cmake --build build-android --config Release -j 22
+
+$ cmake --install build-android --prefix install/ --config Release
+
+$ adb push install /data/local/tmp/smartorchv2/
+
+$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" -ngl 30
+```
