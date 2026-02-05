@@ -75,6 +75,9 @@ GPU Compile
 cmake --build build-android --config Release -j 22
 
 ```
+
+mkdir build-android && cd build-android
+
 $ cmake .. \
 -DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
 -DANDROID_ABI=arm64-v8a \
@@ -94,5 +97,5 @@ $ cmake --install build-android --prefix install/ --config Release
 
 $ adb push install /data/local/tmp/smartorchv2/
 
-$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" -ngl 30
+$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" --no-display-prompt -ngl 30 -c 6000
 ```
