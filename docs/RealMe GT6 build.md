@@ -99,3 +99,14 @@ $ adb push install /data/local/tmp/smartorchv2/
 
 $ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" --no-display-prompt -ngl 30 -c 6000
 ```
+
+
+## Access the server started on the mobile phone from the computer.
+
+- mobile phone:
+
+    LD_LIBRARY_PATH=lib ./bin/llama-server -m {model}.gguf --host 0.0.0.0 --port 8080
+
+- computer
+  
+    adb forward tcp:8080 tcp:8080
