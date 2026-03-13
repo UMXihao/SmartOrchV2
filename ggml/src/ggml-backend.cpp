@@ -1426,6 +1426,8 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
         int split_backend_id = split->backend_id;
         ggml_backend_t split_backend = sched->backends[split_backend_id];
 
+        uint64_t tc0 = ggml_time_us();
+
         // copy the input tensors to the split backend
         for (int input_id = 0; input_id < split->n_inputs; input_id++) {
             ggml_backend_t input_backend = ggml_backend_sched_get_tensor_backend(sched, split->inputs[input_id]);
@@ -1549,6 +1551,8 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             }
         }
 
+        uint64_t tc1 = ggml_time_us();
+
         if (!sched->callback_eval) {
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
             if (ec != GGML_STATUS_SUCCESS) {
@@ -1587,6 +1591,14 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
                 j0 = j1;
             }
         }
+        uint64_t tk1 = ggml_time_us();
+
+        fprintf(stderr,
+            "[split-run] id=%d copy=%.3f ms compute=%.3f ms total=%.3f ms\n",
+            split_id,
+            (tc1 - tc0)/1000.0,
+            (tk1 - tc1)/1000.0,
+            (tk1 - tc0)/1000.0);
 
         // record the event of this copy
         if (split->n_inputs > 0) {
