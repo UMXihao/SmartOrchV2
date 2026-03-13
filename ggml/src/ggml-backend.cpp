@@ -1750,6 +1750,16 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
             ggml_backend_name(sched->backends[sp.backend_id]),
             sp.graph.n_nodes,
             sp.n_inputs);
+
+        for (int i = 0; i < sp.graph.n_nodes; ++i) {
+            struct ggml_tensor * node = sp.graph.nodes[i];
+            printf("[split-node] split=%d backend=%s name=%s op=%s\n",
+                   i,
+                   ggml_backend_buffer_name(node->buffer),
+                   node->name ? node->name : "(null)",
+                   ggml_op_name(node->op));
+        }
+
         for (int j = 0; j < sp.n_inputs; ++j) {
             struct ggml_tensor * t = sp.inputs[j];
             size_t nb = ggml_nbytes(t);
