@@ -1729,6 +1729,28 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
 
     sched->is_alloc = true;
 
+    // split-summary
+    for (int i = 0; i < sched->n_splits; ++i) {
+        const auto & sp = sched->splits[i];
+        fprintf(stderr,
+            "[split-summary] id=%d backend=%s nodes=%d inputs=%d",
+            i,
+            ggml_backend_name(sched->backends[sp.backend_id]),
+            sp.graph.n_nodes,
+            sp.n_inputs);
+        for (int j = 0; j < sp.n_inputs; ++j) {
+            struct ggml_tensor * t = sp.inputs[j];
+            size_t nb = ggml_nbytes(t);
+            fprintf(stderr,
+                "[split-input] split=%d name=%s bytes=%zu backend_dst=%s\n",
+                i,
+                t->name ? t->name : "(null)",
+                nb,
+                ggml_backend_name(sched->backends[sp.backend_id]));
+        }
+    }
+    // split-summary
+
     return true;
 }
 
