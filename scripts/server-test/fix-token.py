@@ -18,7 +18,7 @@ ttft = 0
 tpot = 0
 
 n = 10
-for i in tqdm(range(n)):
+for i in range(n):
     # 构造输入文本
     input_text = '''The internet, a global network connecting billions of devices, has profoundly reshaped nearly every aspect of modern life. Its origins, however, are surprisingly modest.  The story begins in the Cold War era, with the U.S. Department of Defense’s Advanced Research Projects Agency (ARPA).  In 1969, ARPA created ARPANET, a project designed to enable researchers to share computer resources. This initial network connected just four universities: UCLA, Stanford Research Institute, UC Santa Barbara, and the University of Utah. The primary goal wasn’t about cat videos or social media – it was about creating a decentralized communication system that could withstand a potential Soviet attack.  If one part of the network went down, others would remain operational.
 
@@ -42,8 +42,7 @@ However, the internet also presents significant challenges. Concerns about priva
     predicted_per_token_ms = response.json().get("timings").get("predicted_per_token_ms")
     ttft += prompt_ms
     tpot += predicted_per_token_ms
-    print("TTFT: ", prompt_ms)
-    print("TPOT: ", predicted_per_token_ms)
+    print("TTFT: ", prompt_ms, " TPOT: ", predicted_per_token_ms)
 
 print("Average TTFT: ", ttft/n)
 print("Average TPOT: ", tpot/n)

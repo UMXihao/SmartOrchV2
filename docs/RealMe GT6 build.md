@@ -42,8 +42,8 @@ $ cmake \
 ```
 
 ```
-$ mkdir install
-$ cmake --build build-android --config Release -j 8
+$ mkdir smartorch-cpu
+$ cmake --build build-android --config Release -j 22
 $ cmake --install build-android --prefix install/ --config Release
 ```
 
@@ -51,17 +51,16 @@ After installing, go ahead and download the model of your choice to your host sy
 
 
 ```
-$ adb shell "mkdir /data/local/tmp/smartorchv2"
-$ adb push install /data/local/tmp/smartorchv2/
-$ adb push {model}.gguf /data/local/tmp/smartorchv2/
+$ adb push smartorch-cpu /data/local/tmp/
+$ adb push {model}.gguf /data/local/tmp/models
 $ adb shell
 ```
 
 In the `adb shell`:
 
 ```
-$ cd /data/local/tmp/smartorchv2/install
-$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}"
+$ cd /data/local/tmp/smartorch-cpu
+$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}"
 ```
 
 GPU Compile
@@ -89,15 +88,15 @@ $ cmake .. \
 
 $ cd ..
 
-$ mkdir install
+$ mkdir smartorch-gpu
 
 $ cmake --build build-android --config Release -j 22
 
-$ cmake --install build-android --prefix install/ --config Release
+$ cmake --install build-android --prefix smartorch-gpu/ --config Release
 
-$ adb push install /data/local/tmp/smartorchv2/
+$ adb push smartorch-gpu /data/local/tmp/
 
-$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" --no-display-prompt -ngl 30 -c 6000
+$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" --no-display-prompt -ngl 30 -c 6000
 ```
 
 
@@ -110,3 +109,29 @@ $ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../{model}.gguf -n {output-length} -no-
 - computer
   
     adb forward tcp:8080 tcp:8080
+
+### CPU fix-token.py
+- TTFT:  31568.559 TPOT:  124.0401328125
+- TTFT:  22969.977 TPOT:  129.466625
+- TTFT:  22809.283 TPOT:  127.6569140625
+- TTFT:  22953.495 TPOT:  120.2772890625
+- TTFT:  22871.363 TPOT:  127.8050625
+- TTFT:  22826.562 TPOT:  116.590703125
+- TTFT:  22842.857 TPOT:  124.4898671875
+- TTFT:  23088.147 TPOT:  116.120453125
+- TTFT:  23005.06 TPOT:  119.671421875
+- TTFT:  22887.41 TPOT:  119.1555703125
+- Average TTFT:  23782.2713 Average TPOT:  122.52740390624999
+
+### GPU fix-token.py
+- TTFT:  249061.785 TPOT:  4014.5581953125
+- TTFT:  39570.814 TPOT:  2532.0164140625
+- TTFT:  39665.166 TPOT:  2522.842015625
+- TTFT:  39354.19 TPOT:  2542.9343203125
+- TTFT:  40021.348 TPOT:  2514.841390625
+- TTFT:  39375.833 TPOT:  2562.2161484375
+- TTFT:  55456.788 TPOT:  2559.3320078125
+- TTFT:  40126.243 TPOT:  2512.08775
+- TTFT:  40570.132 TPOT:  2561.249578125
+- TTFT:  55383.31 TPOT:  2561.2100390625
+- Average TTFT:  63858.5609 Average TPOT:  2688.3287859375
