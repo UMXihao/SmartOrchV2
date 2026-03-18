@@ -19,6 +19,8 @@ GGML_BACKEND_API ggml_backend_buffer_type_t ggml_backend_opencl_host_buffer_type
 
 GGML_BACKEND_API ggml_backend_reg_t ggml_backend_opencl_reg(void);
 
+GGML_BACKEND_API uint64_t ggml_cl_get_kernel_launch_count(void);
+
 #ifdef  __cplusplus
 }
 #endif

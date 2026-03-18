@@ -29,6 +29,11 @@
 #include <charconv>
 #include <mutex>
 
+#include <atomic>
+#include <inttypes.h>
+
+static std::atomic<uint64_t> g_ocl_kernel_launch_count{0};
+
 #undef MIN
 #undef MAX
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -66,6 +71,34 @@ struct fastdiv_vals {
     uint32_t pad;
 };
 static_assert(sizeof(fastdiv_vals) == 16, "fastdiv_vals size incorrect");
+
+static cl_int ggml_cl_enqueue_kernel_counted(
+        cl_command_queue queue,
+        cl_kernel kernel,
+        cl_uint work_dim,
+        const size_t * global_work_offset,
+        const size_t * global_work_size,
+        const size_t * local_work_size,
+        cl_uint num_events_in_wait_list,
+        const cl_event * event_wait_list,
+        cl_event * event) {
+    g_ocl_kernel_launch_count.fetch_add(1, std::memory_order_relaxed);
+
+    return ggml_cl_enqueue_kernel_counted(
+        queue,
+        kernel,
+        work_dim,
+        global_work_offset,
+        global_work_size,
+        local_work_size,
+        num_events_in_wait_list,
+        event_wait_list,
+        event);
+}
+
+uint64_t ggml_cl_get_kernel_launch_count() {
+    return g_ocl_kernel_launch_count.load(std::memory_order_relaxed);
+}
 
 static fastdiv_vals init_fastdiv_values(uint64_t d_64) {
     GGML_ASSERT(d_64 != 0);
@@ -609,13 +642,13 @@ struct ggml_backend_opencl_context {
     void enqueue_ndrange_kernel(cl_kernel kernel, cl_uint work_dim, size_t *global_work_size, size_t *local_work_size, const ggml_tensor * tensor) {
 #ifdef GGML_OPENCL_PROFILING
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, work_dim, NULL, global_work_size, local_work_size, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, work_dim, NULL, global_work_size, local_work_size, 0, NULL, &evt));
 
         profiling_info.emplace_back();
         populateProfilingInfo(profiling_info.back(), evt, kernel, work_dim, global_work_size, local_work_size, tensor);
 #else
         GGML_UNUSED(tensor);
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, work_dim, NULL, global_work_size, local_work_size, 0, NULL, NULL));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, work_dim, NULL, global_work_size, local_work_size, 0, NULL, NULL));
 #endif
     }
 
@@ -3459,7 +3492,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[] = {64, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clReleaseMemObject(data_device));
 
@@ -3578,7 +3611,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
 
         size_t local_size_q[3] = {4, 16, 1};
         size_t global_size_q[3] = {static_cast<size_t>(width_q), static_cast<size_t>(height_q), 1};
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_size_q, local_size_q, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_size_q, local_size_q, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
 
         // scales
@@ -3597,7 +3630,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
 
         size_t local_size_s[3] = {4, 16, 1};
         size_t global_size_s[3] = {static_cast<size_t>(width_s), static_cast<size_t>(height_s), 1};
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_size_s, local_size_s, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_size_s, local_size_s, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         // <----------------------------------------------------------------------------------> //
 
@@ -3689,7 +3722,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
             size_t local_work_size[3] = {64, 2, 1};
 
             cl_event evt;
-            CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
+            CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
             CL_CHECK(clWaitForEvents(1, &evt));
             CL_CHECK(clReleaseMemObject(data_device));
             tensor->extra = extra;
@@ -3707,7 +3740,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[3] = {64, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clReleaseMemObject(data_device));
 
@@ -3775,7 +3808,7 @@ static void ggml_backend_opencl_buffer_set_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[] = {64, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL, global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clReleaseMemObject(data_device));
 
@@ -3830,7 +3863,7 @@ static void ggml_backend_opencl_buffer_get_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[] = {1, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL,
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL,
             global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clEnqueueReadBuffer(
@@ -3863,7 +3896,7 @@ static void ggml_backend_opencl_buffer_get_tensor(ggml_backend_buffer_t buffer, 
             size_t local_work_size[3] = {64, 2, 1};
 
             cl_event evt;
-            CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL,
+            CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL,
                 global_work_size, local_work_size, 0, NULL, &evt));
             CL_CHECK(clWaitForEvents(1, &evt));
             CL_CHECK(clEnqueueReadBuffer(
@@ -3882,7 +3915,7 @@ static void ggml_backend_opencl_buffer_get_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[] = {1, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL,
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL,
             global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clEnqueueReadBuffer(
@@ -3908,7 +3941,7 @@ static void ggml_backend_opencl_buffer_get_tensor(ggml_backend_buffer_t buffer, 
         size_t local_work_size[] = {1, 1, 1};
 
         cl_event evt;
-        CL_CHECK(clEnqueueNDRangeKernel(queue, kernel, 3, NULL,
+        CL_CHECK(ggml_cl_enqueue_kernel_counted(queue, kernel, 3, NULL,
             global_work_size, local_work_size, 0, NULL, &evt));
         CL_CHECK(clWaitForEvents(1, &evt));
         CL_CHECK(clEnqueueReadBuffer(
