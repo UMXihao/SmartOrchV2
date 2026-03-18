@@ -819,7 +819,7 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         return nullptr;
     }
 
-    uint64_t n_kernel_launch = ggml_cl_get_kernel_launch_count();
+    uint64_t n_kernel_launch = ggml_opencl_get_kernel_dispatch_count();
     if (is_prefill) {
         fprintf(stderr, "[OpenCL][prefill] n_tokens=%d kernel_launches=%" PRIu64 "\n", ubatch.n_tokens, n_kernel_launch);
     }
