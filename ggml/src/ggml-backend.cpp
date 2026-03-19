@@ -1600,6 +1600,13 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             (tk1 - tc1)/1000.0,
             (tk1 - tc0)/1000.0);
 
+        enum ggml_op node_op = split->graph.nodes[0]->op;
+        if (node_op == GGML_OP_MUL_MAT_ID) {
+            fprintf(stderr, "[split-node] split->graph.nodes[0]: GGML_OP_MUL_MAT_ID ms\n");
+        } else {
+            fprintf(stderr, "[split-node] split->graph.nodes[0]: %d ms\n", node_op);
+        }
+
         // record the event of this copy
         if (split->n_inputs > 0) {
             if (sched->events[split_backend_id][sched->cur_copy] != NULL) {
