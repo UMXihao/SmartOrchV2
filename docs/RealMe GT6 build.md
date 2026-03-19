@@ -74,29 +74,30 @@ GPU Compile
 cmake --build build-android --config Release -j 22
 
 ```
-
-mkdir build-android && cd build-android
-
-$ cmake .. \
+cmake \
 -DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
 -DANDROID_ABI=arm64-v8a \
 -DANDROID_PLATFORM=android-28 \
 -DBUILD_SHARED_LIBS=OFF \
 -DLLAMA_CURL=OFF \
 -DGGML_OPENCL=ON \
--DGGML_OPENMP=OFF 
+-DGGML_OPENMP=OFF \
+-B build-android
 
-$ cd ..
+rm -rf kernel
+mkdir kernel
 
-$ mkdir smartorch-gpu
+cmake --build build-android --config Release -j 22
 
-$ cmake --build build-android --config Release -j 22
+cmake --install build-android --prefix kernel/ --config Release
 
-$ cmake --install build-android --prefix smartorch-gpu/ --config Release
+adb -s 3B15BC00X7Q00000 push kernel/ /data/local/tmp/
 
-$ adb push smartorch-gpu /data/local/tmp/
+adb -s 3B15BC00X7Q00000 shell
 
-$ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/{model}.gguf -n {output-length} -no-cnv -p "{your-prompt}" --no-display-prompt -ngl 30 -c 6000
+cd /data/local/tmp/kernel
+
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../split-cpu/fix-token.txt --no-display-prompt -ngl 30
 ```
 
 
@@ -135,3 +136,76 @@ $ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/{model}.gguf -n {output-lengt
 - TTFT:  40570.132 TPOT:  2561.249578125
 - TTFT:  55383.31 TPOT:  2561.2100390625
 - Average TTFT:  63858.5609 Average TPOT:  2688.3287859375
+
+```
+[split-node] split=1666 backend=OpenCL name=norm-26 op=RMS_NORM
+[split-node] split=1667 backend=OpenCL name=attn_norm-26 op=MUL
+[split-node] split=1668 backend=OpenCL name=q-26 op=MUL_MAT
+[split-node] split=1669 backend=OpenCL name=q_pe-26 op=VIEW
+[split-node] split=1670 backend=OpenCL name=q_pe-26 op=ROPE
+[split-node] split=1671 backend=OpenCL name=q_nope-26 op=VIEW
+[split-node] split=1672 backend=OpenCL name=Qcur-26 op=CONCAT
+[split-node] split=1673 backend=OpenCL name=kv_cmpr_pe-26 op=MUL_MAT
+[split-node] split=1674 backend=OpenCL name=k_pe-26 op=VIEW
+[split-node] split=1675 backend=OpenCL name=k_pe-26 op=ROPE
+[split-node] split=1676 backend=OpenCL name=node_1677 op=REPEAT
+[split-node] split=1677 backend=OpenCL name=kv_cmpr-26 op=VIEW
+[split-node] split=1678 backend=OpenCL name=norm-26 op=RMS_NORM
+[split-node] split=1679 backend=OpenCL name=kv_cmpr-26 op=MUL
+[split-node] split=1680 backend=OpenCL name=kv-26 op=MUL_MAT
+[split-node] split=1681 backend=OpenCL name=k_nope_view-26 op=VIEW
+[split-node] split=1682 backend=OpenCL name=Kcur-26 op=CONCAT
+[split-node] split=1683 backend=OpenCL name=Vcur_view-26 op=VIEW
+[split-node] split=1684 backend=OpenCL name=Vcur_cont-26 op=CONT
+[split-node] split=1685 backend=OpenCL name=Kcur-26 (view) op=VIEW
+[split-node] split=1686 backend=OpenCL name=cache_k_l26 (view) op=SET_ROWS
+[split-node] split=1687 backend=OpenCL name=Vcur_cont-26 (view) op=VIEW
+[split-node] split=1688 backend=OpenCL name=cache_v_l26 (view) op=SET_ROWS
+[split-node] split=1689 backend=OpenCL name=Qcur-26 (view) op=VIEW
+[split-node] split=1690 backend=OpenCL name=Qcur-26 (view) (permuted) op=PERMUTE
+[split-node] split=1691 backend=OpenCL name=cache_k_l26 (view) op=VIEW
+[split-node] split=1692 backend=OpenCL name=cache_k_l26 (view) (permuted) op=PERMUTE
+[split-node] split=1693 backend=OpenCL name=cache_v_l26 (view) op=VIEW
+[split-node] split=1694 backend=OpenCL name=cache_v_l26 (view) (permuted) op=PERMUTE
+[split-node] split=1695 backend=OpenCL name=__fattn__-26 op=FLASH_ATTN_BACK
+[split-node] split=1696 backend=OpenCL name=kqv_out-26 op=RESHAPE
+[split-node] split=1697 backend=OpenCL name=node_1698 op=MUL_MAT
+[split-node] split=1698 backend=OpenCL name=node_1699 op=GET_ROWS
+[split-node] split=1699 backend=OpenCL name=node_1700 op=GET_ROWS
+[split-node] split=1700 backend=OpenCL name=ffn_inp-26 op=ADD
+[split-node] split=1701 backend=OpenCL name=norm-26 op=RMS_NORM
+[split-node] split=1702 backend=OpenCL name=ffn_norm-26 op=MUL
+[split-node] split=1703 backend=OpenCL name=ffn_moe_logits-26 op=MUL_MAT
+[split-node] split=1704 backend=OpenCL name=ffn_moe_probs-26 op=SOFT_MAX
+[split-node] split=1705 backend=OpenCL name=ffn_moe_probs-26 (reshaped) op=RESHAPE
+[split-node] split=1706 backend=OpenCL name=ffn_moe_argsort-26 op=ARGSORT
+[split-node] split=1707 backend=OpenCL name=ffn_moe_topk-26 op=VIEW
+[split-node] split=1708 backend=OpenCL name=ffn_moe_weights-26 op=GET_ROWS
+[split-node] split=1709 backend=OpenCL name=ffn_moe_weights_scaled-26 op=SCALE
+[split-node] split=1710 backend=OpenCL name=ffn_norm-26 (reshaped) op=RESHAPE
+[split-node] split=1711 backend=OpenCL name=ffn_moe_gate-26 op=MUL_MAT_ID
+[split-node] split=1712 backend=OpenCL name=ffn_moe_up-26 op=MUL_MAT_ID
+[split-node] split=1713 backend=OpenCL name=ffn_moe_weighted-26 op=(null)
+[split-node] split=1714 backend=OpenCL name=ffn_moe_down-26 op=MUL_MAT_ID
+[split-node] split=1715 backend=OpenCL name=node_1716 op=MUL
+[split-node] split=1716 backend=OpenCL name= (view) op=VIEW
+[split-node] split=1717 backend=OpenCL name=node_1716 (view) op=VIEW
+[split-node] split=1718 backend=OpenCL name=node_1716 (view) op=VIEW
+[split-node] split=1719 backend=OpenCL name=node_1716 (view) op=VIEW
+[split-node] split=1720 backend=OpenCL name=node_1716 (view) op=VIEW
+[split-node] split=1721 backend=OpenCL name=node_1716 (view) op=VIEW
+[split-node] split=1722 backend=OpenCL name=ffn_gate-26 op=MUL_MAT
+[split-node] split=1723 backend=OpenCL name=ffn_up-26 op=MUL_MAT
+[split-node] split=1724 backend=OpenCL name=ffn_swiglu-26 op=(null)
+[split-node] split=1725 backend=OpenCL name=node_1726 op=ADD
+[split-node] split=1726 backend=OpenCL name=node_1727 op=ADD
+[split-node] split=1727 backend=OpenCL name=node_1728 op=ADD
+[split-node] split=1728 backend=OpenCL name=node_1729 op=ADD
+[split-node] split=1729 backend=OpenCL name=ffn_moe_out-26 op=ADD
+[split-node] split=1730 backend=OpenCL name=ffn_shexp-26 op=MUL_MAT
+[split-node] split=1731 backend=OpenCL name=ffn_out-26 op=ADD
+[split-node] split=1732 backend=OpenCL name=l_out-26 op=ADD
+[split-node] split=1733 backend=OpenCL name=norm op=RMS_NORM
+[split-node] split=1734 backend=OpenCL name=result_norm op=MUL
+[split-node] split=1735 backend=OpenCL name=result_output op=MUL_MAT
+```

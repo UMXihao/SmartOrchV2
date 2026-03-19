@@ -1601,11 +1601,7 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             (tk1 - tc0)/1000.0);
 
         enum ggml_op node_op = split->graph.nodes[0]->op;
-        if (node_op == GGML_OP_MUL_MAT_ID) {
-            fprintf(stderr, "[split-node] split->graph.nodes[0]: GGML_OP_MUL_MAT_ID ms\n");
-        } else {
-            fprintf(stderr, "[split-node] split->graph.nodes[0]: %d ms\n", node_op);
-        }
+        fprintf(stderr, "[split-node] split->graph.nodes[0]: %s\n", ggml_op_name(node_op));
 
         // record the event of this copy
         if (split->n_inputs > 0) {
@@ -1758,13 +1754,10 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
             sp.graph.n_nodes,
             sp.n_inputs);
 
-        for (int i = 0; i < sp.graph.n_nodes; ++i) {
-            struct ggml_tensor * node = sp.graph.nodes[i];
-            printf("[split-node] split=%d backend=%s name=%s op=%s\n",
-                   i,
-                   ggml_backend_buffer_name(node->buffer),
-                   node->name ? node->name : "(null)",
-                   ggml_op_name(node->op));
+        for (int k = 0; k < sp.graph.n_nodes; ++k) {
+            struct ggml_tensor * node = sp.graph.nodes[k];
+            printf("[split-node] split=%d node=%d backend=%s name=%s op=%s\n",
+                i, k, ggml_backend_buffer_name(node->buffer), node->name ? node->name : "(null)", ggml_op_name(node->op));
         }
 
         for (int j = 0; j < sp.n_inputs; ++j) {

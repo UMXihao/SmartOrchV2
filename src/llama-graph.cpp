@@ -1043,7 +1043,14 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
         weights = ggml_scale(ctx0, weights, w_scale);
         cb(weights, "ffn_moe_weights_scaled", il);
     }
-
+    // make split.node[0] == MUL_MAT_ID, copying only the used experts
+    if (strncmp(weights->name, "ffn_moe_argsort", 15) == 0
+        || strncmp(weights->name, "ffn_moe_topk", 12) == 0
+        || strncmp(weights->name, "ffn_moe_weights_norm", 20) == 0
+        || strncmp(weights->name, "ffn_moe_weights_scaled", 22) == 0
+        || strncmp(weights->name, "ffn_moe_weights", 13) == 0) {
+        ggml_backend_sched_set_tensor_backend(sched, weights, backend_cpu);
+    }
     //call early so that topk-moe can be used
     ggml_build_forward_expand(gf, weights);
 
