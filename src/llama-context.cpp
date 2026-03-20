@@ -798,10 +798,10 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
     }
 
     const bool is_prefill = ubatch.n_tokens > 1;
-    if (is_prefill) {
-        LLAMA_LOG_INFO("output compute graph.\n");
-        ggml_graph_dump_dot(gf, nullptr, "prefill.dot");
-    }
+    // if (is_prefill) {
+    //     LLAMA_LOG_INFO("output compute graph.\n");
+    //     ggml_graph_dump_dot(gf, nullptr, "prefill.dot");
+    // }
 
     // set the input data for the input tensors
     {

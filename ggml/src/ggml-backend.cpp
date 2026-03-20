@@ -1748,7 +1748,7 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     for (int i = 0; i < sched->n_splits; ++i) {
         const auto & sp = sched->splits[i];
         fprintf(stderr,
-            "[split-summary] id=%d backend=%s nodes=%d inputs=%d",
+            "[split-summary] id=%d backend=%s nodes=%d inputs=%d\n",
             i,
             ggml_backend_name(sched->backends[sp.backend_id]),
             sp.graph.n_nodes,

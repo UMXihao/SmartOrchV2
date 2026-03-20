@@ -97,7 +97,7 @@ adb -s 3B15BC00X7Q00000 shell
 
 cd /data/local/tmp/kernel
 
-LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../split-cpu/fix-token.txt --no-display-prompt -ngl 30
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../split-cpu/fix-token.txt --no-display-prompt --no-warmup -ngl 30
 ```
 
 
@@ -178,11 +178,15 @@ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf
 [split-node] split=1703 backend=OpenCL name=ffn_moe_logits-26 op=MUL_MAT
 [split-node] split=1704 backend=OpenCL name=ffn_moe_probs-26 op=SOFT_MAX
 [split-node] split=1705 backend=OpenCL name=ffn_moe_probs-26 (reshaped) op=RESHAPE
+
+## ggml_top_k
 [split-node] split=1706 backend=OpenCL name=ffn_moe_argsort-26 op=ARGSORT
 [split-node] split=1707 backend=OpenCL name=ffn_moe_topk-26 op=VIEW
 [split-node] split=1708 backend=OpenCL name=ffn_moe_weights-26 op=GET_ROWS
 [split-node] split=1709 backend=OpenCL name=ffn_moe_weights_scaled-26 op=SCALE
 [split-node] split=1710 backend=OpenCL name=ffn_norm-26 (reshaped) op=RESHAPE
+
+## selected_expert
 [split-node] split=1711 backend=OpenCL name=ffn_moe_gate-26 op=MUL_MAT_ID
 [split-node] split=1712 backend=OpenCL name=ffn_moe_up-26 op=MUL_MAT_ID
 [split-node] split=1713 backend=OpenCL name=ffn_moe_weighted-26 op=(null)
