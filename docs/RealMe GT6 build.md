@@ -214,5 +214,30 @@ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf
 [split-node] split=1735 backend=OpenCL name=result_output op=MUL_MAT
 ```
 
-Custom Expert Number
+## Custom Expert Number
 --override-kv deepseek2.expert_used_count=int:4
+
+## Add compile param
+cmake -B build \
+-DCMAKE_C_FLAGS="-DLLAMA_BACK_CPU" \
+-DCMAKE_CXX_FLAGS="-DLLAMA_BACK_CPU"
+
+cmake -B build \
+-DCMAKE_C_FLAGS="-DLLAMA_OPENCL_KERNEL_LAUNCHES" \
+-DCMAKE_CXX_FLAGS="-DLLAMA_OPENCL_KERNEL_LAUNCHES"
+
+
+### 5090 Compile
+- Static Graph
+```
+cmake -B build -DGGML_CUDA=ON
+cmake --build build --config Release
+```
+
+- Dynamic Graph
+```
+cmake -B build -DGGML_CUDA=ON -DCMAKE_C_FLAGS="-DLLAMA_BACK_CPU" -DCMAKE_CXX_FLAGS="-DLLAMA_BACK_CPU"
+cmake --build build --config Release
+```
+
+
