@@ -1003,7 +1003,10 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     // ggml_tensor * selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
     cb(selected_experts->src[0], "ffn_moe_argsort", il);
     cb(selected_experts, "ffn_moe_topk", il);
+#ifdef LLAMA_BACK_CPU
     ggml_backend_sched_set_tensor_backend(sched, selected_experts, backend_cpu);
+#endif // LLAMA_BACK_CPU
+
 
     if (arch == LLM_ARCH_GROVEMOE && n_expert != hparams.n_expert) {
         // TODO: Use scalar div instead when/if implemented
@@ -1016,14 +1019,17 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
 
     ggml_tensor * weights = ggml_get_rows(ctx0, probs, selected_experts); // [1, n_expert_used, n_tokens]
     cb(weights, "ffn_moe_weights", il);
+#ifdef LLAMA_BACK_CPU
     ggml_backend_sched_set_tensor_backend(sched, selected_experts, backend_cpu);
-
+#endif
     if (gating_op == LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX_WEIGHT) {
         weights = ggml_reshape_2d(ctx0, weights, n_expert_used, n_tokens);
         weights = ggml_soft_max(ctx0, weights); // [n_expert_used, n_tokens]
         weights = ggml_reshape_3d(ctx0, weights, 1, n_expert_used, n_tokens);
         cb(weights, "ffn_moe_weights_softmax", il);
+#ifdef LLAMA_BACK_CPU
         ggml_backend_sched_set_tensor_backend(sched, weights, backend_cpu);
+#endif
     }
 
     if (norm_w) {
@@ -1038,14 +1044,18 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
 
         weights = ggml_div(ctx0, weights, weights_sum); // [n_expert_used, n_tokens]
         cb(weights, "ffn_moe_weights_norm", il);
+#ifdef LLAMA_BACK_CPU
         ggml_backend_sched_set_tensor_backend(sched, weights, backend_cpu);
+#endif
 
         weights = ggml_reshape_3d(ctx0, weights, 1, n_expert_used, n_tokens);
     }
     if (scale_w) {
         weights = ggml_scale(ctx0, weights, w_scale);
         cb(weights, "ffn_moe_weights_scaled", il);
+#ifdef LLAMA_BACK_CPU
         ggml_backend_sched_set_tensor_backend(sched, weights, backend_cpu);
+#endif
     }
 
     //call early so that topk-moe can be used

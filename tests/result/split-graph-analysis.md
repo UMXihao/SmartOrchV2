@@ -1,3 +1,4 @@
+```
 [split-summary] id=0 backend=CPU nodes=1 inputs=0
 [split-node] split=0 node=0 backend=CPU name=inp_embd op=GET_ROWS
 [split-summary] id=1 backend=OpenCL nodes=82 inputs=6
@@ -1872,3 +1873,4 @@
 [split-node] split=53 node=22 backend=OpenCL name=norm op=RMS_NORM
 [split-node] split=53 node=23 backend=OpenCL name=result_norm op=MUL
 [split-node] split=53 node=24 backend=OpenCL name=result_output op=MUL_MAT
+```

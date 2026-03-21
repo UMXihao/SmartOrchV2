@@ -6,7 +6,9 @@
 #include "llama-memory.h"
 #include "llama-mmap.h"
 #include "llama-model.h"
+#ifdef LLAMA_OPENCL_KERNEL_LAUNCHES
 #include "ggml-opencl.h"
+#endif
 
 #include <cinttypes>
 #include <cstring>
@@ -819,10 +821,12 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         return nullptr;
     }
 
+#ifdef LLAMA_OPENCL_KERNEL_LAUNCHES
     uint64_t n_kernel_launch = ggml_opencl_get_kernel_dispatch_count();
     if (is_prefill) {
         fprintf(stderr, "[OpenCL][prefill] n_tokens=%d kernel_launches=%" PRIu64 "\n", ubatch.n_tokens, n_kernel_launch);
     }
+#endif
 
     ret = GGML_STATUS_SUCCESS;
 
