@@ -213,3 +213,6 @@ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf
 [split-node] split=1734 backend=OpenCL name=result_norm op=MUL
 [split-node] split=1735 backend=OpenCL name=result_output op=MUL_MAT
 ```
+
+Custom Expert Number
+--override-kv deepseek2.expert_used_count=int:4
