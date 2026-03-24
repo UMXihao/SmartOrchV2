@@ -226,18 +226,57 @@ cmake -B build \
 -DCMAKE_C_FLAGS="-DLLAMA_OPENCL_KERNEL_LAUNCHES" \
 -DCMAKE_CXX_FLAGS="-DLLAMA_OPENCL_KERNEL_LAUNCHES"
 
-
+## 静态图捕获 + 动态参数更新
 ### 5090 Compile
 - Static Graph
 ```
 cmake -B build -DGGML_CUDA=ON
-cmake --build build --config Release
+cmake --build build --config Release -j 22
 ```
 
 - Dynamic Graph
 ```
 cmake -B build -DGGML_CUDA=ON -DCMAKE_C_FLAGS="-DLLAMA_BACK_CPU" -DCMAKE_CXX_FLAGS="-DLLAMA_BACK_CPU"
-cmake --build build --config Release
+cmake --build build --config Release -j 22
+```
+- Static Graph Result
+```
+[split-run] id=0 copy=0.000 ms compute=0.112 ms total=0.112 ms
+[split-run] id=1 copy=16.634 ms compute=8.129 ms total=24.763 ms
+```
+- Dynamic Graph Result
+```
+CUDA计算速度太快等不到数据加载
+/home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-backend.cpp:1492: GGML_ASSERT(id >= 0 && id < n_expert) failed
+[New LWP 2428826]
+[New LWP 2428831]
+[New LWP 2428832]
+[New LWP 2428833]
+[New LWP 2428834]
+[New LWP 2428835]
+[New LWP 2428836]
+[Thread debugging using libthread_db enabled]
+
+
+/home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-cuda/ggml-cuda.cu:89: CUDA error
+CUDA error: an illegal memory access was encountered
+  current device: 0, in function launch_mul_mat_q at /home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-cuda/template-instances/../mmq.cuh:3559
+  cudaFuncSetAttribute((mul_mat_q<type, mmq_x, false>), cudaFuncAttributeMaxDynamicSharedMemorySize, nbytes_shared)
+[New LWP 2432251]
+[New LWP 2432260]
+[New LWP 2432261]
+[New LWP 2432262]
+[Thread debugging using libthread_db enabled]
+
 ```
 
 
+### CPU Compile
+```
+cmake -B build
+cmake --build build --config Release -j 22
+```
+- Static Graph Result
+```
+[split-run] id=0 copy=0.000 ms compute=1250.716 ms total=1250.716 ms
+```
