@@ -280,3 +280,46 @@ cmake --build build --config Release -j 22
 ```
 [split-run] id=0 copy=0.000 ms compute=1250.716 ms total=1250.716 ms
 ```
+
+
+### Win Compile Android GPU
+```
+# git bash execution
+
+export ANDROID_NDK=~/Documents/Sean/android-sdk/ndk/26.3.11579264
+
+mkdir build-android
+cd build-android
+
+cmake .. -G Ninja \
+  -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+  -DANDROID_ABI=arm64-v8a \
+  -DANDROID_PLATFORM=android-28 \
+  -DBUILD_SHARED_LIBS=OFF \
+  -DGGML_OPENCL=ON \
+  -DLLAMA_CURL=OFF \
+  -DGGML_OPENMP=OFF
+  
+ninja
+
+cd ..
+mkdir win-gpu
+cmake --install build-android --prefix win-gpu/ --config Release
+
+# cmd execution
+
+cd ..
+adb push win-gpu/ /data/local/tmp/
+
+# compression (skip)
+tar -cf win-gpu.tar win-gpu
+adb push win-gpu.tar /data/local/tmp/
+adb shell
+cd /data/local/tmp
+tar -xf win-gpu.tar
+
+chmod -R 755 win-gpu
+
+
+```
+
