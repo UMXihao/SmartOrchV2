@@ -1426,7 +1426,7 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
         int split_backend_id = split->backend_id;
         ggml_backend_t split_backend = sched->backends[split_backend_id];
 
-        uint64_t tc0 = ggml_time_us();
+        // uint64_t tc0 = ggml_time_us();
 
         // copy the input tensors to the split backend
         for (int input_id = 0; input_id < split->n_inputs; input_id++) {
@@ -1551,7 +1551,7 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             }
         }
 
-        uint64_t tc1 = ggml_time_us();
+        // uint64_t tc1 = ggml_time_us();
 
         if (!sched->callback_eval) {
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
@@ -1591,17 +1591,17 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
                 j0 = j1;
             }
         }
-        uint64_t tk1 = ggml_time_us();
+        // uint64_t tk1 = ggml_time_us();
+        //
+        // fprintf(stderr,
+        //     "[split-run] id=%d copy=%.3f ms compute=%.3f ms total=%.3f ms\n",
+        //     split_id,
+        //     (tc1 - tc0)/1000.0,
+        //     (tk1 - tc1)/1000.0,
+        //     (tk1 - tc0)/1000.0);
 
-        fprintf(stderr,
-            "[split-run] id=%d copy=%.3f ms compute=%.3f ms total=%.3f ms\n",
-            split_id,
-            (tc1 - tc0)/1000.0,
-            (tk1 - tc1)/1000.0,
-            (tk1 - tc0)/1000.0);
-
-        enum ggml_op node_op = split->graph.nodes[0]->op;
-        fprintf(stderr, "[split-node] split->graph.nodes[0]: %s\n", ggml_op_name(node_op));
+        // enum ggml_op node_op = split->graph.nodes[0]->op;
+        // fprintf(stderr, "[split-node] split->graph.nodes[0]: %s\n", ggml_op_name(node_op));
 
         // record the event of this copy
         if (split->n_inputs > 0) {
@@ -1745,32 +1745,32 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     sched->is_alloc = true;
 
     // split-summary
-    for (int i = 0; i < sched->n_splits; ++i) {
-        const auto & sp = sched->splits[i];
-        fprintf(stderr,
-            "[split-summary] id=%d backend=%s nodes=%d inputs=%d\n",
-            i,
-            ggml_backend_name(sched->backends[sp.backend_id]),
-            sp.graph.n_nodes,
-            sp.n_inputs);
-
-        for (int k = 0; k < sp.graph.n_nodes; ++k) {
-            struct ggml_tensor * node = sp.graph.nodes[k];
-            printf("[split-node] split=%d node=%d backend=%s name=%s op=%s\n",
-                i, k, ggml_backend_buffer_name(node->buffer), node->name ? node->name : "(null)", ggml_op_name(node->op));
-        }
-
-        for (int j = 0; j < sp.n_inputs; ++j) {
-            struct ggml_tensor * t = sp.inputs[j];
-            size_t nb = ggml_nbytes(t);
-            fprintf(stderr,
-                "[split-input] split=%d name=%s bytes=%zu backend_dst=%s\n",
-                i,
-                t->name ? t->name : "(null)",
-                nb,
-                ggml_backend_name(sched->backends[sp.backend_id]));
-        }
-    }
+    // for (int i = 0; i < sched->n_splits; ++i) {
+    //     const auto & sp = sched->splits[i];
+    //     fprintf(stderr,
+    //         "[split-summary] id=%d backend=%s nodes=%d inputs=%d\n",
+    //         i,
+    //         ggml_backend_name(sched->backends[sp.backend_id]),
+    //         sp.graph.n_nodes,
+    //         sp.n_inputs);
+    //
+    //     for (int k = 0; k < sp.graph.n_nodes; ++k) {
+    //         struct ggml_tensor * node = sp.graph.nodes[k];
+    //         printf("[split-node] split=%d node=%d backend=%s name=%s op=%s\n",
+    //             i, k, ggml_backend_buffer_name(node->buffer), node->name ? node->name : "(null)", ggml_op_name(node->op));
+    //     }
+    //
+    //     for (int j = 0; j < sp.n_inputs; ++j) {
+    //         struct ggml_tensor * t = sp.inputs[j];
+    //         size_t nb = ggml_nbytes(t);
+    //         fprintf(stderr,
+    //             "[split-input] split=%d name=%s bytes=%zu backend_dst=%s\n",
+    //             i,
+    //             t->name ? t->name : "(null)",
+    //             nb,
+    //             ggml_backend_name(sched->backends[sp.backend_id]));
+    //     }
+    // }
     // split-summary
 
     return true;
