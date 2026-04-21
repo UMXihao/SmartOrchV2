@@ -356,9 +356,23 @@ struct ggml_backend_opencl_device_context {
     cl_context context = nullptr;
 };
 
+#ifdef GGML_TOKEN_STAT
+struct ggml_cl_moe_token_stats {
+    // key: op / tensor name, e.g. "ffn_moe_down-1"
+    std::unordered_map<std::string, std::vector<uint64_t>> assign_count_by_op;
+
+    // optional: total prefill ubatches seen
+    uint64_t prefill_calls = 0;
+};
+#endif
+
 // backend context
 struct ggml_backend_opencl_context {
     int ref_count;
+
+#ifdef GGML_TOKEN_STAT
+    ggml_cl_moe_token_stats moe_token_stats;
+#endif
 
     cl_device_id device;
     std::string device_name;
@@ -666,6 +680,62 @@ struct ggml_backend_opencl_context {
         }
     }
 };
+
+#ifdef GGML_TOKEN_STAT
+static void ggml_cl_record_moe_prefill_token_stats(
+        ggml_backend_opencl_context * ctx,
+        const ggml_tensor * dst,
+        const ggml_tensor * ids,
+        int n_expert_total) {
+    // ids: [top_k, n_tokens]
+    const int top_k    = (int) ids->ne[0];
+    const int n_tokens = (int) ids->ne[1];
+
+    if (std::strncmp(dst->name, "ffn_moe_down-", 13) != 0) {
+        return;
+    }
+
+    // 只统计 prefill；decode 时 n_tokens 通常为 1
+    if (n_tokens <= 1) {
+        return;
+    }
+    ctx->moe_token_stats.prefill_calls++;
+
+    // ids is i32 in current mul_mat_id contract
+    const size_t ids_nbytes = ggml_nbytes(ids);
+    std::vector<int32_t> host_ids(ids_nbytes / sizeof(int32_t));
+    // 直接把 ids 拉回 host 统计
+    ggml_backend_tensor_get(ids, host_ids.data(), 0, ids_nbytes);
+
+    auto & bucket = ctx->moe_token_stats.assign_count_by_op[dst->name];
+
+    if ((int) bucket.size() < n_expert_total) {
+        bucket.resize(n_expert_total, 0);
+    }
+
+    // ids layout: [top_k, n_tokens]
+    // ggml 默认线性访问可按 row-major contiguous 的逻辑理解这里的数据块；
+    for (int t = 0; t < n_tokens; ++t) {
+        fprintf(stderr, "token %d: ", t);
+        for (int k = 0; k < top_k; ++k) {
+            const int32_t eid = host_ids[k + t * top_k];
+            fprintf(stderr, "%d ", eid);
+            if (eid >= 0 && eid < n_expert_total) {
+                bucket[eid]++;
+            }
+        }
+    }
+
+    GGML_LOG_INFO("[OpenCL][MoEStats] op=%s prefill_tokens=%d top_k=%d\n", dst->name, n_tokens, top_k);
+
+    for (int eid = 0; eid < n_expert_total; ++eid) {
+        if (bucket[eid] > 0) {
+            GGML_LOG_INFO("[OpenCL][MoEStats] op=%s expert=%d cumulative_assign=%llu\n",
+                          dst->name, eid, (unsigned long long) bucket[eid]);
+        }
+    }
+}
+#endif
 
 // All registered devices with a default device in the front.
 static std::vector<ggml_backend_device> g_ggml_backend_opencl_devices;
@@ -8865,7 +8935,11 @@ bool ggml_cl_compute_forward(ggml_backend_t backend, struct ggml_tensor * tensor
 
     ggml_tensor * src0 = tensor->src[0];
     ggml_tensor * src1 = tensor->src[1];
-
+#ifdef GGML_TOKEN_STAT
+    const ggml_tensor * ids  = tensor->src[2];
+    const int n_expert_total = (int) src0->ne[2];
+    ggml_backend_opencl_context *backend_ctx = (ggml_backend_opencl_context *)backend->context;
+#endif
     const bool any_on_device = tensor->extra
         || (src0 != nullptr && src0->extra)
         || (src1 != nullptr && src1->extra);
@@ -9049,6 +9123,9 @@ bool ggml_cl_compute_forward(ggml_backend_t backend, struct ggml_tensor * tensor
             if (!any_on_device) {
                 return false;
             }
+#ifdef GGML_TOKEN_STAT
+            ggml_cl_record_moe_prefill_token_stats(backend_ctx, tensor, ids, n_expert_total);
+#endif
             func = ggml_cl_mul_mat_id;
             break;
         case GGML_OP_SCALE:

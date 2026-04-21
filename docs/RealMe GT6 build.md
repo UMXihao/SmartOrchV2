@@ -226,6 +226,17 @@ cmake --build build_ndk26 --config Release -j 22
 # llama.cpp compile
 export ANDROID_NDK=~/android-sdk/ndk/26.3.11579264
 
+cmake \
+-DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+-DANDROID_ABI=arm64-v8a \
+-DANDROID_PLATFORM=android-28 \
+-DBUILD_SHARED_LIBS=OFF \
+-DLLAMA_CURL=OFF \
+-DGGML_OPENCL=ON \
+-DGGML_OPENMP=OFF \
+-B build-android
+
+## OpenCL Profiling
 
 cmake \
 -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
