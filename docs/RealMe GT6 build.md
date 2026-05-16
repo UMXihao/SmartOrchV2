@@ -89,7 +89,7 @@ mkdir kernel
 
 cmake --build build-android --config Release -j 22
 
-cmake --install build-android --prefix baseline/ --config Release
+cmake --install build-android --prefix test-output/ --config Release
 
 adb -s 3B15BC00X7Q00000 push kernel/ /data/local/tmp/
 
@@ -97,10 +97,11 @@ adb -s 3B15BC00X7Q00000 shell
 
 cd /data/local/tmp/kernel
 
-LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../split-cpu/fix-token.txt --no-display-prompt --no-warmup -ngl 30
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30
 
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf -n 10 -no-cnv -f ../models/fix-token.txt --no-display-prompt  -ngl 50 -c 4096
 
-LD_LIBRARY_PATH=lib ./bin/llama-completion -m ../models/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf -n 10 -no-cnv -f ../models/fix-token.txt --no-display-prompt  -ngl 50 -c 4096
+LD_LIBRARY_PATH=lib ./bin/llama-completion -m ../models/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf -n 10 -no-cnv -f ../models/fix-token.txt --no-display-prompt  -ngl 50 -c 4096
 
 ```
 
@@ -268,4 +269,14 @@ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf
 ```
 
 
+- mobile phone:
 
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080
+
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --override-kv deepseek2.expert_used_count=int:4 --host 0.0.0.0 --port 8080
+
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --override-kv deepseek2.expert_used_count=int:2 --host 0.0.0.0 --port 8080
+
+- computer
+
+adb forward tcp:8080 tcp:8080

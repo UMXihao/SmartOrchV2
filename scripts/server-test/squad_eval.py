@@ -10,6 +10,10 @@ import time
 from tqdm import tqdm
 from datasets import load_dataset
 import evaluate
+import numpy as np
+
+def percentile(data, percentile):
+    return float(np.percentile(data, percentile, method="linear"))
 
 url = "http://127.0.0.1:8080/completion"
 # url = "http://127.0.0.1:8080/v1/chat/completions"
@@ -24,9 +28,11 @@ squad_val = load_dataset("squad", split="validation")
 
 predictions = []
 references = []
+prefill = []
+decode = []
 
 start_time = time.time()
-for i in tqdm(range(1000)):
+for i in tqdm(range(100)):
 #for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]
@@ -42,15 +48,30 @@ for i in tqdm(range(1000)):
 
     reference = {'answers': answers, 'id': question_id}
     prediction = {'prediction_text': response.json().get("content"), 'id': question_id}
+    prompt_ms = response.json().get("timings").get("prompt_ms")
+    predicted_per_token_ms = response.json().get("timings").get("predicted_per_token_ms")
+    print("TTFT: ", prompt_ms, " TPOT: ", predicted_per_token_ms)
+    prefill.append(prompt_ms)
+    decode.append(predicted_per_token_ms)
 
     references.append(reference)
     predictions.append(prediction)
+
 
 result = evaluate.load("squad").compute(predictions=predictions, references=references)
 print(result)
 end_time = time.time()
 elapsed_time = end_time - start_time
+
 print(f"requests: {elapsed_time:.2f} seconds")
+print("==========PREFILL============")
+print("P50 = ", percentile(prefill, 50), " ms")
+print("P90 = ", percentile(prefill, 90), " ms")
+print("P99 = ", percentile(prefill, 99), " ms")
+print("==========DECODE============")
+print("P50 = ", percentile(decode, 50), " ms")
+print("P90 = ", percentile(decode, 90), " ms")
+print("P99 = ", percentile(decode, 99), " ms")
 
 '''
 ./build/bin/llama-server -m /data/DeepSeek-Coder-V2-Lite-Instruct-IQ2_XS.gguf -ngl 33
