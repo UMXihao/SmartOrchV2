@@ -29,7 +29,7 @@ def main():
     # fig_height = max(6, matrix.shape[0] * 0.35)
     plt.rcParams.update({
         "font.family": "sans-serif",
-        "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"],
+        "font.sans-serif": ["Times New Roman", "Times", "DejaVu Serif"],
         "font.size": 8.5,  # 全局默认字体
         "axes.labelsize": 9,  # 坐标轴标题
         "axes.titlesize": 9,  # 子图标题

@@ -138,42 +138,42 @@ def main():
 
             # 关键：将 prompt 与模型生成拼接，形成“可运行的候选解决方案”。
             # code_eval 在评估时就是把候选 + 测试代码拼接后执行。[3](https://github.com/huggingface/evaluate/blob/main/metrics/code_eval/code_eval.py)
-            candidate_program = prompt + "\n" + completion
-
-            candidates_for_task.append(candidate_program)
-
-            # 记录到 JSONL
-            jsonl_fp.write(json.dumps({
-                "task_id": task_id,
-                "sample_id": s,
-                "prompt_prefix": prompt,
-                "completion": completion
-            }, ensure_ascii=False) + "\n")
-
-        predictions.append(candidates_for_task)
-
-    jsonl_fp.close()
-    gen_secs = time.time() - start
-
-    # 4) 计算 pass@k（需要设置 HF_ALLOW_CODE_EVAL=1；脚本内也强制设置一次）
-    # https://github.com/huggingface/evaluate/blob/main/metrics/code_eval/code_eval.py
-    os.environ["HF_ALLOW_CODE_EVAL"] = "1"
-
-    code_eval = evaluate.load("code_eval")  # HumanEval 评测指标（会执行代码，注意安全）
-    pass_at_k, results = code_eval.compute(
-        references=references,
-        predictions=predictions,
-        k=args.k,
-        timeout=20.0 # 可根据机器性能调整并发与超时（默认超时 3s 在官方实现里；此处沿用 evaluate 内部默认）
-    )
-
-    print("\n================ Evaluation Summary ================\n")
-    print(f"Tasks evaluated        : {num_tasks}")
-    print(f"Samples per task       : {args.num_samples_per_task}")
-    print(f"Generation time (s)    : {gen_secs:.2f}")
-    print(f"Pass@k                 : {pass_at_k}")  # 形如 {'pass@1': 0.XX, 'pass@10': 0.YY}
-    print(f"Raw generations saved  : {args.save_jsonl}")
-    print("\n===================================================\n")
+    #         candidate_program = prompt + "\n" + completion
+    #
+    #         candidates_for_task.append(candidate_program)
+    #
+    #         # 记录到 JSONL
+    #         jsonl_fp.write(json.dumps({
+    #             "task_id": task_id,
+    #             "sample_id": s,
+    #             "prompt_prefix": prompt,
+    #             "completion": completion
+    #         }, ensure_ascii=False) + "\n")
+    #
+    #     predictions.append(candidates_for_task)
+    #
+    # jsonl_fp.close()
+    # gen_secs = time.time() - start
+    #
+    # # 4) 计算 pass@k（需要设置 HF_ALLOW_CODE_EVAL=1；脚本内也强制设置一次）
+    # # https://github.com/huggingface/evaluate/blob/main/metrics/code_eval/code_eval.py
+    # os.environ["HF_ALLOW_CODE_EVAL"] = "1"
+    #
+    # code_eval = evaluate.load("code_eval")  # HumanEval 评测指标（会执行代码，注意安全）
+    # pass_at_k, results = code_eval.compute(
+    #     references=references,
+    #     predictions=predictions,
+    #     k=args.k,
+    #     timeout=20.0 # 可根据机器性能调整并发与超时（默认超时 3s 在官方实现里；此处沿用 evaluate 内部默认）
+    # )
+    #
+    # print("\n================ Evaluation Summary ================\n")
+    # print(f"Tasks evaluated        : {num_tasks}")
+    # print(f"Samples per task       : {args.num_samples_per_task}")
+    # print(f"Generation time (s)    : {gen_secs:.2f}")
+    # print(f"Pass@k                 : {pass_at_k}")  # 形如 {'pass@1': 0.XX, 'pass@10': 0.YY}
+    # print(f"Raw generations saved  : {args.save_jsonl}")
+    # print("\n===================================================\n")
 
 
 if __name__ == "__main__":

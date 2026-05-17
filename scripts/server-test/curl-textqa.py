@@ -384,7 +384,7 @@ def main():
     parser.add_argument("--server", default="http://localhost:8080", help="llama-server地址")
 
     parser.add_argument("--split", default="test", choices=["train", "val", "test"], help="数据集划分")
-    parser.add_argument("--max-samples", type=int, default=50, help="最大评估样本数")
+    parser.add_argument("--max-samples", type=int, default=100, help="最大评估样本数")
     parser.add_argument("--output", default="textvqa_results.json", help="输出文件名")
     # parser.add_argument("--download-data", action="store_true", help="下载文本数据")
     # parser.add_argument("--download-images", action="store_true", help="下载图像数据")
