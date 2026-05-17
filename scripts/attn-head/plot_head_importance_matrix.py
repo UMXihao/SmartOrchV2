@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 def main():
-    csv_path = Path("dist_csv/head_importance_100.csv")
+    csv_path = Path("dist_csv/head_importance_mtbench.csv")
 
     df = pd.read_csv(csv_path)
     value_col = "importance"
@@ -85,7 +85,7 @@ def main():
     )
 
     plt.tight_layout()
-    plt.savefig("result/head_importance_matrix_100.pdf", bbox_inches="tight")
+    plt.savefig("result/head_importance_matrix_mtbench.pdf", bbox_inches="tight")
     # plt.show()
     # plt.close()
 

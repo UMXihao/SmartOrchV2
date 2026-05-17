@@ -87,15 +87,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-
 '''
-python build_squad_prompts.py \
+python squad_prompts_build.py \
   --dataset squad \
   --split validation \
   --out squad_validation_test.jsonl \
   --max 100
 
-
+# default jsonl path attn-head/squad_validation_test.jsonl
 
 ./build/bin/llama-head-importance \
   -m ../llama.cpp/models/deepseek-v2-lite-chat.gguf \
