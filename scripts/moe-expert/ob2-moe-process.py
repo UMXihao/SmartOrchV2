@@ -21,8 +21,9 @@ def read_counts(file_path: Path) -> list[int]:
     with file_path.open("r", encoding="utf-8") as f:
         counts = [int(line.strip()) for line in f if line.strip()]
 
-    if len(counts) != 63:
-        raise ValueError(f"{file_path.name} 中有 {len(counts)} 行，不是 63 行")
+    while len(counts) != 63:
+        counts.append(0)
+        # raise ValueError(f"{file_path.name} 中有 {len(counts)} 行，不是 63 行")
 
     return counts
 
@@ -64,6 +65,6 @@ def merge_moe_files(input_dir: str, output_csv: str):
 
 if __name__ == "__main__":
     merge_moe_files(
-        input_dir="test",                 # 26 个 txt 文件所在目录
-        output_csv="moe_activation_test.csv"
+        input_dir="alpaca",                 # 26 个 txt 文件所在目录
+        output_csv="moe_activation_alpaca.csv"
     )

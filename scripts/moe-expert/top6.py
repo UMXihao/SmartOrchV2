@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 读取 CSV
-df = pd.read_csv("moe_activation_test.csv")
+df = pd.read_csv("moe_activation_alpaca.csv")
 
 # 找出所有 layer 列
 layer_cols = [col for col in df.columns if col.startswith("layer_")]
@@ -20,4 +20,4 @@ result = pd.DataFrame(top6_experts)
 print(result)
 
 # 保存结果
-result.to_csv("top6_experts_per_layer_test.csv", index=False)
+result.to_csv("top6_experts_per_layer_alpaca.csv", index=False)

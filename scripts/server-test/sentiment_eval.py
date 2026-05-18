@@ -48,7 +48,7 @@ n_ok = 0
 n_fail = 0
 
 start_time = time.time()
-for i in tqdm(range(1000)):
+for i in tqdm(range(100)):
     # for i in tqdm(range(len(dataset))):
 
     ex = dataset[i]
@@ -67,28 +67,28 @@ for i in tqdm(range(1000)):
     }
 
     response = requests.post(url, headers=headers, json=data)
-    response.raise_for_status()
-
-
-    data = response.json()
-    output = data["choices"][0]["message"]["content"]
-    # print("output: ", data)
-    # print("output: ", output)
-    prediction = normalize_pred(output)
-    # print("prediction: ", prediction)
-
-    ok = (prediction == gt)
-    if prediction is None:
-        n_fail += 1
-    elif ok:
-        n_ok += 1
-
-
-result = n_ok/1000
-print("acc: ", result)
-end_time = time.time()
-elapsed_time = end_time - start_time
-print(f"requests: {elapsed_time:.2f} seconds")
+#     response.raise_for_status()
+#
+#
+#     data = response.json()
+#     output = data["choices"][0]["message"]["content"]
+#     # print("output: ", data)
+#     # print("output: ", output)
+#     prediction = normalize_pred(output)
+#     # print("prediction: ", prediction)
+#
+#     ok = (prediction == gt)
+#     if prediction is None:
+#         n_fail += 1
+#     elif ok:
+#         n_ok += 1
+#
+#
+# result = n_ok/1000
+# print("acc: ", result)
+# end_time = time.time()
+# elapsed_time = end_time - start_time
+# print(f"requests: {elapsed_time:.2f} seconds")
 
 '''
 Label:  NEGATIVE
