@@ -34,7 +34,7 @@ def top6(file_name, id):
     # 转成 DataFrame，方便查看和保存
     result = pd.DataFrame(top6_experts)
     # 保存结果
-    result.to_csv("squad-request/top6_experts_request_" + str(id) + ".csv", index=False)
+    result.to_csv("squad-request/top6_experts_request" + str(id) + ".csv", index=False)
 
 def percentile(data, percentile):
     return float(np.percentile(data, percentile, method="linear"))
@@ -57,8 +57,8 @@ def read_counts(file_path: Path) -> list[int]:
     with file_path.open("r", encoding="utf-8") as f:
         counts = [int(line.strip()) for line in f if line.strip()]
 
-    while len(counts) != 63:
-        counts.append(0)
+    if len(counts) != 63:
+        raise ValueError(f"{file_path.name} 中有 {len(counts)} 行，不是 63 行")
 
     return counts
 
@@ -114,17 +114,14 @@ def delete_moe_files(input_dir: str):
         print("没有找到匹配文件")
         return
 
-    cleared_count = 0
-
     for file in files:
         try:
-            file.write_text("", encoding="utf-8")
-            print(f"已清空: {file}")
-            cleared_count += 1
+            file.unlink()
+            print(f"已删除: {file}")
         except Exception as e:
-            print(f"清空失败: {file}, 原因: {e}")
+            print(f"删除失败: {file}, 原因: {e}")
 
-    print(f"完成，共清空 {cleared_count} 个文件")
+    print(f"完成，共删除 {len(files)} 个文件")
 
 # def main():
 url = "http://127.0.0.1:8080/completion"
@@ -143,7 +140,7 @@ for i in tqdm(range(100)):
     requests.post(url, headers=headers, json=data)
 
     # 整合prefill的采集文件
-    moe_activation_output = "moe_activation_request_" + str(i) + ".csv"
+    moe_activation_output = "moe_activation_request" + str(i)
     merge_moe_files("/home/lili-5090/Sean/SmartOrchV2", moe_activation_output)
 
     # 融合完删除prefill的采集文件
