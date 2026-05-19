@@ -1,0 +1,758 @@
+op name, kernel name, exec duration (ms), global size, local size, output size
+attn_norm-0,kernel_rms_norm_mul,0.294200,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-0,kernel_add_row,0.209900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-0,kernel_rope_neox_f32,0.231100,1792x512x1,64x1x1,128x28x512x1
+Kcur-0,kernel_add_row,0.021400,65536x0x0,64x0x0,512x512x1x1
+Kcur-0,kernel_rope_neox_f32,0.028300,256x512x1,64x1x1,128x4x512x1
+node_11,kernel_mul_mv_q6_K_f32,30.032400,512x32768x1,2x64x1,512x512x1x1
+Vcur-0,kernel_add_row,0.018000,65536x0x0,64x0x0,512x512x1x1
+cache_k_l0 (view),kernel_set_rows_f16_i64,0.035800,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l0 (view),kernel_set_rows_f16_i64,0.025600,262144x1x1,512x1x1,512x4096x1x1
+ (copy),kernel_cpy_f32_f16,0.024000,32768x1x1,64x1x1,512x512x1x1
+__fattn__-0,flash_attn_f32_f16,78.004303,512x28x0,32x1x0,128x28x512x1
+ffn_inp-0,kernel_add,0.342000,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-0,kernel_rms_norm_mul,0.198800,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-0,kernel_swiglu,1.621000,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-0,kernel_mul_mv_q6_K_f32,1063.328857,3584x32768x1,2x64x1,3584x512x1x1
+l_out-0,kernel_add,0.319400,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-1,kernel_rms_norm_mul,0.196900,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-1,kernel_add_row,0.200700,458752x0x0,64x0x0,3584x512x1x1
+Qcur-1,kernel_rope_neox_f32,0.230400,1792x512x1,64x1x1,128x28x512x1
+Kcur-1,kernel_add_row,0.023200,65536x0x0,64x0x0,512x512x1x1
+Kcur-1,kernel_rope_neox_f32,0.028000,256x512x1,64x1x1,128x4x512x1
+node_46,kernel_mul_mv_q6_K_f32,30.026400,512x32768x1,2x64x1,512x512x1x1
+Vcur-1,kernel_add_row,0.017500,65536x0x0,64x0x0,512x512x1x1
+cache_k_l1 (view),kernel_set_rows_f16_i64,0.035600,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l1 (view),kernel_set_rows_f16_i64,0.026000,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-1,flash_attn_f32_f16,78.167999,512x28x0,32x1x0,128x28x512x1
+ffn_inp-1,kernel_add,0.325500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-1,kernel_rms_norm_mul,0.197800,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-1,kernel_swiglu,1.623700,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-1,kernel_mul_mv_q6_K_f32,1060.587524,3584x32768x1,2x64x1,3584x512x1x1
+l_out-1,kernel_add,0.320100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-2,kernel_rms_norm_mul,0.198600,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-2,kernel_add_row,0.194400,458752x0x0,64x0x0,3584x512x1x1
+Qcur-2,kernel_rope_neox_f32,0.230000,1792x512x1,64x1x1,128x28x512x1
+Kcur-2,kernel_add_row,0.023200,65536x0x0,64x0x0,512x512x1x1
+Kcur-2,kernel_rope_neox_f32,0.027200,256x512x1,64x1x1,128x4x512x1
+node_80,kernel_mul_mv_q6_K_f32,30.035400,512x32768x1,2x64x1,512x512x1x1
+Vcur-2,kernel_add_row,0.017800,65536x0x0,64x0x0,512x512x1x1
+cache_k_l2 (view),kernel_set_rows_f16_i64,0.035700,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l2 (view),kernel_set_rows_f16_i64,0.025700,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-2,flash_attn_f32_f16,78.055000,512x28x0,32x1x0,128x28x512x1
+ffn_inp-2,kernel_add,0.331200,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-2,kernel_rms_norm_mul,0.199900,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-2,kernel_swiglu,1.619800,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-2,kernel_mul_mv_q6_K_f32,1062.189209,3584x32768x1,2x64x1,3584x512x1x1
+l_out-2,kernel_add,0.322300,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-3,kernel_rms_norm_mul,0.197400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-3,kernel_add_row,0.197000,458752x0x0,64x0x0,3584x512x1x1
+Qcur-3,kernel_rope_neox_f32,0.231900,1792x512x1,64x1x1,128x28x512x1
+Kcur-3,kernel_add_row,0.021800,65536x0x0,64x0x0,512x512x1x1
+Kcur-3,kernel_rope_neox_f32,0.027500,256x512x1,64x1x1,128x4x512x1
+Vcur-3,kernel_add_row,0.019200,65536x0x0,64x0x0,512x512x1x1
+cache_k_l3 (view),kernel_set_rows_f16_i64,0.025900,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l3 (view),kernel_set_rows_f16_i64,0.024100,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-3,flash_attn_f32_f16,79.495293,512x28x0,32x1x0,128x28x512x1
+ffn_inp-3,kernel_add,0.327400,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-3,kernel_rms_norm_mul,0.199300,524288x1x1,1024x1x1,3584x512x1x1
+l_out-3,kernel_add,0.321800,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-4,kernel_rms_norm_mul,0.197400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-4,kernel_add_row,0.201000,458752x0x0,64x0x0,3584x512x1x1
+Qcur-4,kernel_rope_neox_f32,0.232800,1792x512x1,64x1x1,128x28x512x1
+Kcur-4,kernel_add_row,0.021200,65536x0x0,64x0x0,512x512x1x1
+Kcur-4,kernel_rope_neox_f32,0.027300,256x512x1,64x1x1,128x4x512x1
+Vcur-4,kernel_add_row,0.020000,65536x0x0,64x0x0,512x512x1x1
+cache_k_l4 (view),kernel_set_rows_f16_i64,0.026100,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l4 (view),kernel_set_rows_f16_i64,0.024100,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-4,flash_attn_f32_f16,77.935104,512x28x0,32x1x0,128x28x512x1
+ffn_inp-4,kernel_add,0.329500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-4,kernel_rms_norm_mul,0.200100,524288x1x1,1024x1x1,3584x512x1x1
+l_out-4,kernel_add,0.320200,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-5,kernel_rms_norm_mul,0.199500,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-5,kernel_add_row,0.200000,458752x0x0,64x0x0,3584x512x1x1
+Qcur-5,kernel_rope_neox_f32,0.232000,1792x512x1,64x1x1,128x28x512x1
+Kcur-5,kernel_add_row,0.023000,65536x0x0,64x0x0,512x512x1x1
+Kcur-5,kernel_rope_neox_f32,0.026700,256x512x1,64x1x1,128x4x512x1
+node_182,kernel_mul_mv_q6_K_f32,30.033001,512x32768x1,2x64x1,512x512x1x1
+Vcur-5,kernel_add_row,0.018100,65536x0x0,64x0x0,512x512x1x1
+cache_k_l5 (view),kernel_set_rows_f16_i64,0.034200,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l5 (view),kernel_set_rows_f16_i64,0.025700,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-5,flash_attn_f32_f16,78.068398,512x28x0,32x1x0,128x28x512x1
+ffn_inp-5,kernel_add,0.328500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-5,kernel_rms_norm_mul,0.199800,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-5,kernel_swiglu,2.645700,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-5,kernel_mul_mv_q6_K_f32,1060.242676,3584x32768x1,2x64x1,3584x512x1x1
+l_out-5,kernel_add,0.319100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-6,kernel_rms_norm_mul,0.199800,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-6,kernel_add_row,0.200900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-6,kernel_rope_neox_f32,0.233300,1792x512x1,64x1x1,128x28x512x1
+Kcur-6,kernel_add_row,0.021200,65536x0x0,64x0x0,512x512x1x1
+Kcur-6,kernel_rope_neox_f32,0.027900,256x512x1,64x1x1,128x4x512x1
+Vcur-6,kernel_add_row,0.019300,65536x0x0,64x0x0,512x512x1x1
+cache_k_l6 (view),kernel_set_rows_f16_i64,0.026000,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l6 (view),kernel_set_rows_f16_i64,0.024100,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-6,flash_attn_f32_f16,77.955597,512x28x0,32x1x0,128x28x512x1
+ffn_inp-6,kernel_add,0.329600,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-6,kernel_rms_norm_mul,0.199300,524288x1x1,1024x1x1,3584x512x1x1
+l_out-6,kernel_add,0.323800,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-7,kernel_rms_norm_mul,0.197800,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-7,kernel_add_row,0.194500,458752x0x0,64x0x0,3584x512x1x1
+Qcur-7,kernel_rope_neox_f32,0.231600,1792x512x1,64x1x1,128x28x512x1
+Kcur-7,kernel_add_row,0.022400,65536x0x0,64x0x0,512x512x1x1
+Kcur-7,kernel_rope_neox_f32,0.027900,256x512x1,64x1x1,128x4x512x1
+Vcur-7,kernel_add_row,0.019700,65536x0x0,64x0x0,512x512x1x1
+cache_k_l7 (view),kernel_set_rows_f16_i64,0.026200,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l7 (view),kernel_set_rows_f16_i64,0.024000,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-7,flash_attn_f32_f16,78.046204,512x28x0,32x1x0,128x28x512x1
+ffn_inp-7,kernel_add,0.326800,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-7,kernel_rms_norm_mul,0.198400,524288x1x1,1024x1x1,3584x512x1x1
+l_out-7,kernel_add,0.328600,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-8,kernel_rms_norm_mul,0.198400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-8,kernel_add_row,0.198900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-8,kernel_rope_neox_f32,0.232300,1792x512x1,64x1x1,128x28x512x1
+Kcur-8,kernel_add_row,0.022300,65536x0x0,64x0x0,512x512x1x1
+Kcur-8,kernel_rope_neox_f32,0.027900,256x512x1,64x1x1,128x4x512x1
+node_284,kernel_mul_mv_q6_K_f32,30.030399,512x32768x1,2x64x1,512x512x1x1
+Vcur-8,kernel_add_row,0.017600,65536x0x0,64x0x0,512x512x1x1
+cache_k_l8 (view),kernel_set_rows_f16_i64,0.035200,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l8 (view),kernel_set_rows_f16_i64,0.025600,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-8,flash_attn_f32_f16,78.572495,512x28x0,32x1x0,128x28x512x1
+ffn_inp-8,kernel_add,0.324500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-8,kernel_rms_norm_mul,0.199500,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-8,kernel_swiglu,1.620900,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-8,kernel_mul_mv_q6_K_f32,1059.728882,3584x32768x1,2x64x1,3584x512x1x1
+l_out-8,kernel_add,0.319500,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-9,kernel_rms_norm_mul,0.199400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-9,kernel_add_row,0.200500,458752x0x0,64x0x0,3584x512x1x1
+Qcur-9,kernel_rope_neox_f32,0.233600,1792x512x1,64x1x1,128x28x512x1
+Kcur-9,kernel_add_row,0.022900,65536x0x0,64x0x0,512x512x1x1
+Kcur-9,kernel_rope_neox_f32,0.028000,256x512x1,64x1x1,128x4x512x1
+Vcur-9,kernel_add_row,0.019900,65536x0x0,64x0x0,512x512x1x1
+cache_k_l9 (view),kernel_set_rows_f16_i64,0.026300,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l9 (view),kernel_set_rows_f16_i64,0.024300,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-9,flash_attn_f32_f16,78.147293,512x28x0,32x1x0,128x28x512x1
+ffn_inp-9,kernel_add,0.330300,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-9,kernel_rms_norm_mul,0.197500,524288x1x1,1024x1x1,3584x512x1x1
+l_out-9,kernel_add,0.325100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-10,kernel_rms_norm_mul,0.198900,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-10,kernel_add_row,0.198800,458752x0x0,64x0x0,3584x512x1x1
+Qcur-10,kernel_rope_neox_f32,0.231100,1792x512x1,64x1x1,128x28x512x1
+Kcur-10,kernel_add_row,0.022300,65536x0x0,64x0x0,512x512x1x1
+Kcur-10,kernel_rope_neox_f32,0.027500,256x512x1,64x1x1,128x4x512x1
+Vcur-10,kernel_add_row,0.020100,65536x0x0,64x0x0,512x512x1x1
+cache_k_l10 (view),kernel_set_rows_f16_i64,0.026200,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l10 (view),kernel_set_rows_f16_i64,0.024200,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-10,flash_attn_f32_f16,78.015694,512x28x0,32x1x0,128x28x512x1
+ffn_inp-10,kernel_add,0.327400,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-10,kernel_rms_norm_mul,0.198800,524288x1x1,1024x1x1,3584x512x1x1
+l_out-10,kernel_add,0.328100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-11,kernel_rms_norm_mul,0.201200,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-11,kernel_add_row,0.211700,458752x0x0,64x0x0,3584x512x1x1
+Qcur-11,kernel_rope_neox_f32,0.250900,1792x512x1,64x1x1,128x28x512x1
+Kcur-11,kernel_add_row,0.025100,65536x0x0,64x0x0,512x512x1x1
+Kcur-11,kernel_rope_neox_f32,0.029400,256x512x1,64x1x1,128x4x512x1
+node_386,kernel_mul_mv_q6_K_f32,36.823299,512x32768x1,2x64x1,512x512x1x1
+Vcur-11,kernel_add_row,0.035100,65536x0x0,64x0x0,512x512x1x1
+cache_k_l11 (view),kernel_set_rows_f16_i64,0.047300,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l11 (view),kernel_set_rows_f16_i64,0.029700,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-11,flash_attn_f32_f16,102.711296,512x28x0,32x1x0,128x28x512x1
+ffn_inp-11,kernel_add,0.323800,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-11,kernel_rms_norm_mul,0.203000,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-11,kernel_swiglu,1.734900,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-11,kernel_mul_mv_q6_K_f32,1069.820679,3584x32768x1,2x64x1,3584x512x1x1
+l_out-11,kernel_add,0.322000,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-12,kernel_rms_norm_mul,0.198100,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-12,kernel_add_row,0.201400,458752x0x0,64x0x0,3584x512x1x1
+Qcur-12,kernel_rope_neox_f32,0.232200,1792x512x1,64x1x1,128x28x512x1
+Kcur-12,kernel_add_row,0.024800,65536x0x0,64x0x0,512x512x1x1
+Kcur-12,kernel_rope_neox_f32,0.027300,256x512x1,64x1x1,128x4x512x1
+Vcur-12,kernel_add_row,0.018100,65536x0x0,64x0x0,512x512x1x1
+cache_k_l12 (view),kernel_set_rows_f16_i64,0.027200,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l12 (view),kernel_set_rows_f16_i64,0.024000,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-12,flash_attn_f32_f16,83.646301,512x28x0,32x1x0,128x28x512x1
+ffn_inp-12,kernel_add,0.343800,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-12,kernel_rms_norm_mul,0.212400,524288x1x1,1024x1x1,3584x512x1x1
+l_out-12,kernel_add,0.324300,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-13,kernel_rms_norm_mul,0.200500,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-13,kernel_add_row,0.197800,458752x0x0,64x0x0,3584x512x1x1
+Qcur-13,kernel_rope_neox_f32,0.235100,1792x512x1,64x1x1,128x28x512x1
+Kcur-13,kernel_add_row,0.022500,65536x0x0,64x0x0,512x512x1x1
+Kcur-13,kernel_rope_neox_f32,0.028900,256x512x1,64x1x1,128x4x512x1
+Vcur-13,kernel_add_row,0.018000,65536x0x0,64x0x0,512x512x1x1
+cache_k_l13 (view),kernel_set_rows_f16_i64,0.027500,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l13 (view),kernel_set_rows_f16_i64,0.024800,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-13,flash_attn_f32_f16,86.026199,512x28x0,32x1x0,128x28x512x1
+ffn_inp-13,kernel_add,0.401600,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-13,kernel_rms_norm_mul,0.237900,524288x1x1,1024x1x1,3584x512x1x1
+l_out-13,kernel_add,0.355300,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-14,kernel_rms_norm_mul,0.214000,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-14,kernel_add_row,0.206800,458752x0x0,64x0x0,3584x512x1x1
+Qcur-14,kernel_rope_neox_f32,0.241200,1792x512x1,64x1x1,128x28x512x1
+Kcur-14,kernel_add_row,0.023800,65536x0x0,64x0x0,512x512x1x1
+Kcur-14,kernel_rope_neox_f32,0.027500,256x512x1,64x1x1,128x4x512x1
+node_488,kernel_mul_mv_q6_K_f32,29.249901,512x32768x1,2x64x1,512x512x1x1
+Vcur-14,kernel_add_row,0.024600,65536x0x0,64x0x0,512x512x1x1
+cache_k_l14 (view),kernel_set_rows_f16_i64,0.037900,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l14 (view),kernel_set_rows_f16_i64,0.028400,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-14,flash_attn_f32_f16,87.987198,512x28x0,32x1x0,128x28x512x1
+ffn_inp-14,kernel_add,0.346500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-14,kernel_rms_norm_mul,0.221800,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-14,kernel_swiglu,1.670600,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-14,kernel_mul_mv_q6_K_f32,1135.831177,3584x32768x1,2x64x1,3584x512x1x1
+l_out-14,kernel_add,0.336100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-15,kernel_rms_norm_mul,0.206100,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-15,kernel_add_row,0.205500,458752x0x0,64x0x0,3584x512x1x1
+Qcur-15,kernel_rope_neox_f32,0.241000,1792x512x1,64x1x1,128x28x512x1
+Kcur-15,kernel_add_row,0.561600,65536x0x0,64x0x0,512x512x1x1
+Kcur-15,kernel_rope_neox_f32,0.026300,256x512x1,64x1x1,128x4x512x1
+Vcur-15,kernel_add_row,0.018200,65536x0x0,64x0x0,512x512x1x1
+cache_k_l15 (view),kernel_set_rows_f16_i64,0.028300,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l15 (view),kernel_set_rows_f16_i64,0.025000,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-15,flash_attn_f32_f16,85.427399,512x28x0,32x1x0,128x28x512x1
+ffn_inp-15,kernel_add,0.342500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-15,kernel_rms_norm_mul,0.233000,524288x1x1,1024x1x1,3584x512x1x1
+l_out-15,kernel_add,0.881600,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-16,kernel_rms_norm_mul,0.206000,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-16,kernel_add_row,0.209600,458752x0x0,64x0x0,3584x512x1x1
+Qcur-16,kernel_rope_neox_f32,0.239800,1792x512x1,64x1x1,128x28x512x1
+Kcur-16,kernel_add_row,0.022700,65536x0x0,64x0x0,512x512x1x1
+Kcur-16,kernel_rope_neox_f32,0.027500,256x512x1,64x1x1,128x4x512x1
+Vcur-16,kernel_add_row,0.017500,65536x0x0,64x0x0,512x512x1x1
+cache_k_l16 (view),kernel_set_rows_f16_i64,0.028100,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l16 (view),kernel_set_rows_f16_i64,0.024500,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-16,flash_attn_f32_f16,78.349800,512x28x0,32x1x0,128x28x512x1
+ffn_inp-16,kernel_add,0.323100,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-16,kernel_rms_norm_mul,0.198600,524288x1x1,1024x1x1,3584x512x1x1
+l_out-16,kernel_add,0.328800,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-17,kernel_rms_norm_mul,0.204100,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-17,kernel_add_row,0.207000,458752x0x0,64x0x0,3584x512x1x1
+Qcur-17,kernel_rope_neox_f32,0.241700,1792x512x1,64x1x1,128x28x512x1
+Kcur-17,kernel_add_row,0.024000,65536x0x0,64x0x0,512x512x1x1
+Kcur-17,kernel_rope_neox_f32,0.028100,256x512x1,64x1x1,128x4x512x1
+node_590,kernel_mul_mv_q6_K_f32,29.694201,512x32768x1,2x64x1,512x512x1x1
+Vcur-17,kernel_add_row,0.022200,65536x0x0,64x0x0,512x512x1x1
+cache_k_l17 (view),kernel_set_rows_f16_i64,0.035300,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l17 (view),kernel_set_rows_f16_i64,0.026700,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-17,flash_attn_f32_f16,87.148201,512x28x0,32x1x0,128x28x512x1
+ffn_inp-17,kernel_add,0.365300,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-17,kernel_rms_norm_mul,0.205400,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-17,kernel_swiglu,1.627000,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-17,kernel_mul_mv_q6_K_f32,1058.905396,3584x32768x1,2x64x1,3584x512x1x1
+l_out-17,kernel_add,0.324600,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-18,kernel_rms_norm_mul,0.196800,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-18,kernel_add_row,0.202900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-18,kernel_rope_neox_f32,0.231700,1792x512x1,64x1x1,128x28x512x1
+Kcur-18,kernel_add_row,0.023400,65536x0x0,64x0x0,512x512x1x1
+Kcur-18,kernel_rope_neox_f32,0.028100,256x512x1,64x1x1,128x4x512x1
+Vcur-18,kernel_add_row,0.017600,65536x0x0,64x0x0,512x512x1x1
+cache_k_l18 (view),kernel_set_rows_f16_i64,0.026600,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l18 (view),kernel_set_rows_f16_i64,0.025600,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-18,flash_attn_f32_f16,78.129295,512x28x0,32x1x0,128x28x512x1
+ffn_inp-18,kernel_add,0.332400,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-18,kernel_rms_norm_mul,0.198900,524288x1x1,1024x1x1,3584x512x1x1
+l_out-18,kernel_add,0.337700,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-19,kernel_rms_norm_mul,0.197400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-19,kernel_add_row,0.192700,458752x0x0,64x0x0,3584x512x1x1
+Qcur-19,kernel_rope_neox_f32,0.230600,1792x512x1,64x1x1,128x28x512x1
+Kcur-19,kernel_add_row,0.022300,65536x0x0,64x0x0,512x512x1x1
+Kcur-19,kernel_rope_neox_f32,0.028500,256x512x1,64x1x1,128x4x512x1
+Vcur-19,kernel_add_row,0.017500,65536x0x0,64x0x0,512x512x1x1
+cache_k_l19 (view),kernel_set_rows_f16_i64,0.027600,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l19 (view),kernel_set_rows_f16_i64,0.024600,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-19,flash_attn_f32_f16,78.149506,512x28x0,32x1x0,128x28x512x1
+ffn_inp-19,kernel_add,0.327500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-19,kernel_rms_norm_mul,0.197500,524288x1x1,1024x1x1,3584x512x1x1
+l_out-19,kernel_add,0.339100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-20,kernel_rms_norm_mul,0.197300,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-20,kernel_add_row,0.200400,458752x0x0,64x0x0,3584x512x1x1
+Qcur-20,kernel_rope_neox_f32,0.230000,1792x512x1,64x1x1,128x28x512x1
+Kcur-20,kernel_add_row,0.019600,65536x0x0,64x0x0,512x512x1x1
+Kcur-20,kernel_rope_neox_f32,0.027000,256x512x1,64x1x1,128x4x512x1
+node_692,kernel_mul_mv_q6_K_f32,30.021500,512x32768x1,2x64x1,512x512x1x1
+Vcur-20,kernel_add_row,0.017800,65536x0x0,64x0x0,512x512x1x1
+cache_k_l20 (view),kernel_set_rows_f16_i64,0.034500,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l20 (view),kernel_set_rows_f16_i64,0.026200,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-20,flash_attn_f32_f16,78.252899,512x28x0,32x1x0,128x28x512x1
+ffn_inp-20,kernel_add,0.328400,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-20,kernel_rms_norm_mul,0.199300,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-20,kernel_swiglu,1.668200,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-20,kernel_mul_mv_q6_K_f32,1058.833130,3584x32768x1,2x64x1,3584x512x1x1
+l_out-20,kernel_add,0.322800,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-21,kernel_rms_norm_mul,0.198100,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-21,kernel_add_row,0.207100,458752x0x0,64x0x0,3584x512x1x1
+Qcur-21,kernel_rope_neox_f32,0.233100,1792x512x1,64x1x1,128x28x512x1
+Kcur-21,kernel_add_row,0.023300,65536x0x0,64x0x0,512x512x1x1
+Kcur-21,kernel_rope_neox_f32,0.027300,256x512x1,64x1x1,128x4x512x1
+Vcur-21,kernel_add_row,0.018000,65536x0x0,64x0x0,512x512x1x1
+cache_k_l21 (view),kernel_set_rows_f16_i64,0.026900,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l21 (view),kernel_set_rows_f16_i64,0.025500,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-21,flash_attn_f32_f16,78.232895,512x28x0,32x1x0,128x28x512x1
+ffn_inp-21,kernel_add,0.335800,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-21,kernel_rms_norm_mul,0.198700,524288x1x1,1024x1x1,3584x512x1x1
+l_out-21,kernel_add,0.321900,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-22,kernel_rms_norm_mul,0.198300,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-22,kernel_add_row,0.199300,458752x0x0,64x0x0,3584x512x1x1
+Qcur-22,kernel_rope_neox_f32,0.229700,1792x512x1,64x1x1,128x28x512x1
+Kcur-22,kernel_add_row,0.023400,65536x0x0,64x0x0,512x512x1x1
+Kcur-22,kernel_rope_neox_f32,0.028400,256x512x1,64x1x1,128x4x512x1
+Vcur-22,kernel_add_row,0.017700,65536x0x0,64x0x0,512x512x1x1
+cache_k_l22 (view),kernel_set_rows_f16_i64,0.027400,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l22 (view),kernel_set_rows_f16_i64,0.024500,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-22,flash_attn_f32_f16,78.246201,512x28x0,32x1x0,128x28x512x1
+ffn_inp-22,kernel_add,0.336900,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-22,kernel_rms_norm_mul,0.202000,524288x1x1,1024x1x1,3584x512x1x1
+l_out-22,kernel_add,0.325000,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-23,kernel_rms_norm_mul,0.199300,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-23,kernel_add_row,0.208900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-23,kernel_rope_neox_f32,0.231300,1792x512x1,64x1x1,128x28x512x1
+Kcur-23,kernel_add_row,0.021500,65536x0x0,64x0x0,512x512x1x1
+Kcur-23,kernel_rope_neox_f32,0.026300,256x512x1,64x1x1,128x4x512x1
+node_794,kernel_mul_mv_q6_K_f32,27.680300,512x32768x1,2x64x1,512x512x1x1
+Vcur-23,kernel_add_row,0.019500,65536x0x0,64x0x0,512x512x1x1
+cache_k_l23 (view),kernel_set_rows_f16_i64,0.033500,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l23 (view),kernel_set_rows_f16_i64,0.025500,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-23,flash_attn_f32_f16,78.850494,512x28x0,32x1x0,128x28x512x1
+ffn_inp-23,kernel_add,0.344800,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-23,kernel_rms_norm_mul,0.202100,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-23,kernel_swiglu,1.642800,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-23,kernel_mul_mv_q6_K_f32,1062.865234,3584x32768x1,2x64x1,3584x512x1x1
+l_out-23,kernel_add,0.321100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-24,kernel_rms_norm_mul,0.199400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-24,kernel_add_row,0.231900,458752x0x0,64x0x0,3584x512x1x1
+Qcur-24,kernel_rope_neox_f32,0.240400,1792x512x1,64x1x1,128x28x512x1
+Kcur-24,kernel_add_row,0.028600,65536x0x0,64x0x0,512x512x1x1
+Kcur-24,kernel_rope_neox_f32,0.026100,256x512x1,64x1x1,128x4x512x1
+node_828,kernel_mul_mv_q6_K_f32,30.144699,512x32768x1,2x64x1,512x512x1x1
+Vcur-24,kernel_add_row,0.022200,65536x0x0,64x0x0,512x512x1x1
+cache_k_l24 (view),kernel_set_rows_f16_i64,0.041700,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l24 (view),kernel_set_rows_f16_i64,0.028800,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-24,flash_attn_f32_f16,81.365700,512x28x0,32x1x0,128x28x512x1
+ffn_inp-24,kernel_add,0.351900,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-24,kernel_rms_norm_mul,0.203800,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-24,kernel_swiglu,1.654900,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-24,kernel_mul_mv_q6_K_f32,1056.981445,3584x32768x1,2x64x1,3584x512x1x1
+l_out-24,kernel_add,0.322100,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-25,kernel_rms_norm_mul,0.199300,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-25,kernel_add_row,0.207500,458752x0x0,64x0x0,3584x512x1x1
+Qcur-25,kernel_rope_neox_f32,0.232700,1792x512x1,64x1x1,128x28x512x1
+Kcur-25,kernel_add_row,0.022500,65536x0x0,64x0x0,512x512x1x1
+Kcur-25,kernel_rope_neox_f32,0.027600,256x512x1,64x1x1,128x4x512x1
+node_862,kernel_mul_mv_q6_K_f32,30.019300,512x32768x1,2x64x1,512x512x1x1
+Vcur-25,kernel_add_row,0.017900,65536x0x0,64x0x0,512x512x1x1
+cache_k_l25 (view),kernel_set_rows_f16_i64,0.036400,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l25 (view),kernel_set_rows_f16_i64,0.026300,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-25,flash_attn_f32_f16,78.301903,512x28x0,32x1x0,128x28x512x1
+ffn_inp-25,kernel_add,0.331700,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-25,kernel_rms_norm_mul,0.197200,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-25,kernel_swiglu,1.633500,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-25,kernel_mul_mv_q6_K_f32,1056.907471,3584x32768x1,2x64x1,3584x512x1x1
+l_out-25,kernel_add,0.319000,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-26,kernel_rms_norm_mul,0.198400,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-26,kernel_add_row,0.216500,458752x0x0,64x0x0,3584x512x1x1
+Qcur-26,kernel_rope_neox_f32,0.232500,1792x512x1,64x1x1,128x28x512x1
+Kcur-26,kernel_add_row,0.020300,65536x0x0,64x0x0,512x512x1x1
+Kcur-26,kernel_rope_neox_f32,0.026700,256x512x1,64x1x1,128x4x512x1
+node_896,kernel_mul_mv_q6_K_f32,27.302299,512x32768x1,2x64x1,512x512x1x1
+Vcur-26,kernel_add_row,0.018300,65536x0x0,64x0x0,512x512x1x1
+cache_k_l26 (view),kernel_set_rows_f16_i64,0.034600,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l26 (view),kernel_set_rows_f16_i64,0.025700,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-26,flash_attn_f32_f16,78.417000,512x28x0,32x1x0,128x28x512x1
+ffn_inp-26,kernel_add,0.338500,32768x1x1,64x1x1,3584x512x1x1
+ffn_norm-26,kernel_rms_norm_mul,0.198100,524288x1x1,1024x1x1,3584x512x1x1
+ffn_swiglu-26,kernel_swiglu,1.640100,262144x1x1,512x1x1,18944x512x1x1
+ffn_out-26,kernel_mul_mv_q6_K_f32,1061.065430,3584x32768x1,2x64x1,3584x512x1x1
+l_out-26,kernel_add,0.319900,32768x1x1,64x1x1,3584x512x1x1
+attn_norm-27,kernel_rms_norm_mul,0.198300,524288x1x1,1024x1x1,3584x512x1x1
+Qcur-27,kernel_add_row,0.211100,458752x0x0,64x0x0,3584x512x1x1
+Qcur-27,kernel_rope_neox_f32,0.232300,1792x512x1,64x1x1,128x28x512x1
+Kcur-27,kernel_add_row,0.021200,65536x0x0,64x0x0,512x512x1x1
+Kcur-27,kernel_rope_neox_f32,0.026500,256x512x1,64x1x1,128x4x512x1
+node_930,kernel_mul_mv_q6_K_f32,27.298401,512x32768x1,2x64x1,512x512x1x1
+Vcur-27,kernel_add_row,0.018500,65536x0x0,64x0x0,512x512x1x1
+cache_k_l27 (view),kernel_set_rows_f16_i64,0.034400,262144x1x1,512x1x1,512x4096x1x1
+cache_v_l27 (view),kernel_set_rows_f16_i64,0.025400,262144x1x1,512x1x1,512x4096x1x1
+__fattn__-27,flash_attn_f32_f16,78.371696,512x28x0,32x1x0,128x28x512x1
+attn_norm-0,kernel_rms_norm_mul,0.047800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-0,kernel_add_row,0.035700,90496x0x0,64x0x0,3584x101x1x1
+Qcur-0,kernel_rope_neox_f32,0.038500,1792x101x1,64x1x1,128x28x101x1
+Kcur-0,kernel_add_row,0.006900,12928x0x0,64x0x0,512x101x1x1
+Kcur-0,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_11,kernel_mul_mv_q6_K_f32,5.941400,512x6464x1,2x64x1,512x101x1x1
+Vcur-0,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l0 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l0 (view),kernel_set_rows_f16_i64,0.005800,51712x1x1,512x1x1,512x4096x1x1
+ (copy),kernel_cpy_f32_f16,0.011000,8192x1x1,64x1x1,768x128x1x1
+__fattn__-0,flash_attn_f32_f16,26.827499,128x28x0,32x1x0,128x28x101x1
+ffn_inp-0,kernel_add,0.093600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-0,kernel_rms_norm_mul,0.036300,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-0,kernel_swiglu,0.323000,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-0,kernel_mul_mv_q6_K_f32,209.419998,3584x6464x1,2x64x1,3584x101x1x1
+l_out-0,kernel_add,0.057700,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-1,kernel_rms_norm_mul,0.039100,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-1,kernel_add_row,0.075700,90496x0x0,64x0x0,3584x101x1x1
+Qcur-1,kernel_rope_neox_f32,0.038100,1792x101x1,64x1x1,128x28x101x1
+Kcur-1,kernel_add_row,0.007700,12928x0x0,64x0x0,512x101x1x1
+Kcur-1,kernel_rope_neox_f32,0.005100,256x101x1,64x1x1,128x4x101x1
+node_46,kernel_mul_mv_q6_K_f32,5.949700,512x6464x1,2x64x1,512x101x1x1
+Vcur-1,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l1 (view),kernel_set_rows_f16_i64,0.007600,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l1 (view),kernel_set_rows_f16_i64,0.006100,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-1,flash_attn_f32_f16,26.749201,128x28x0,32x1x0,128x28x101x1
+ffn_inp-1,kernel_add,0.064700,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-1,kernel_rms_norm_mul,0.036100,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-1,kernel_swiglu,0.323500,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-1,kernel_mul_mv_q6_K_f32,209.660309,3584x6464x1,2x64x1,3584x101x1x1
+l_out-1,kernel_add,0.058000,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-2,kernel_rms_norm_mul,0.039800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-2,kernel_add_row,0.076900,90496x0x0,64x0x0,3584x101x1x1
+Qcur-2,kernel_rope_neox_f32,0.037900,1792x101x1,64x1x1,128x28x101x1
+Kcur-2,kernel_add_row,0.006000,12928x0x0,64x0x0,512x101x1x1
+Kcur-2,kernel_rope_neox_f32,0.005100,256x101x1,64x1x1,128x4x101x1
+node_80,kernel_mul_mv_q6_K_f32,5.942700,512x6464x1,2x64x1,512x101x1x1
+Vcur-2,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l2 (view),kernel_set_rows_f16_i64,0.007600,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l2 (view),kernel_set_rows_f16_i64,0.005900,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-2,flash_attn_f32_f16,26.617901,128x28x0,32x1x0,128x28x101x1
+ffn_inp-2,kernel_add,0.103600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-2,kernel_rms_norm_mul,0.036200,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-2,kernel_swiglu,0.323200,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-2,kernel_mul_mv_q6_K_f32,211.067993,3584x6464x1,2x64x1,3584x101x1x1
+l_out-2,kernel_add,0.055700,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-3,kernel_rms_norm_mul,0.039400,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-3,kernel_add_row,0.074600,90496x0x0,64x0x0,3584x101x1x1
+Qcur-3,kernel_rope_neox_f32,0.036000,1792x101x1,64x1x1,128x28x101x1
+Kcur-3,kernel_add_row,0.008000,12928x0x0,64x0x0,512x101x1x1
+Kcur-3,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-3,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l3 (view),kernel_set_rows_f16_i64,0.007200,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l3 (view),kernel_set_rows_f16_i64,0.005900,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-3,flash_attn_f32_f16,26.715200,128x28x0,32x1x0,128x28x101x1
+ffn_inp-3,kernel_add,0.103700,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-3,kernel_rms_norm_mul,0.036600,103424x1x1,1024x1x1,3584x101x1x1
+l_out-3,kernel_add,0.060700,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-4,kernel_rms_norm_mul,0.039000,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-4,kernel_add_row,0.034200,90496x0x0,64x0x0,3584x101x1x1
+Qcur-4,kernel_rope_neox_f32,0.038000,1792x101x1,64x1x1,128x28x101x1
+Kcur-4,kernel_add_row,0.007900,12928x0x0,64x0x0,512x101x1x1
+Kcur-4,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-4,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l4 (view),kernel_set_rows_f16_i64,0.007300,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l4 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-4,flash_attn_f32_f16,26.695000,128x28x0,32x1x0,128x28x101x1
+ffn_inp-4,kernel_add,0.103600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-4,kernel_rms_norm_mul,0.036500,103424x1x1,1024x1x1,3584x101x1x1
+l_out-4,kernel_add,0.060500,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-5,kernel_rms_norm_mul,0.038300,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-5,kernel_add_row,0.033100,90496x0x0,64x0x0,3584x101x1x1
+Qcur-5,kernel_rope_neox_f32,0.034100,1792x101x1,64x1x1,128x28x101x1
+Kcur-5,kernel_add_row,0.005800,12928x0x0,64x0x0,512x101x1x1
+Kcur-5,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_182,kernel_mul_mv_q6_K_f32,5.942400,512x6464x1,2x64x1,512x101x1x1
+Vcur-5,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l5 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l5 (view),kernel_set_rows_f16_i64,0.005800,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-5,flash_attn_f32_f16,26.623600,128x28x0,32x1x0,128x28x101x1
+ffn_inp-5,kernel_add,0.062600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-5,kernel_rms_norm_mul,0.037300,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-5,kernel_swiglu,0.331000,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-5,kernel_mul_mv_q6_K_f32,209.015198,3584x6464x1,2x64x1,3584x101x1x1
+l_out-5,kernel_add,0.057100,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-6,kernel_rms_norm_mul,0.040100,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-6,kernel_add_row,0.075600,90496x0x0,64x0x0,3584x101x1x1
+Qcur-6,kernel_rope_neox_f32,0.036200,1792x101x1,64x1x1,128x28x101x1
+Kcur-6,kernel_add_row,0.007900,12928x0x0,64x0x0,512x101x1x1
+Kcur-6,kernel_rope_neox_f32,0.005300,256x101x1,64x1x1,128x4x101x1
+Vcur-6,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l6 (view),kernel_set_rows_f16_i64,0.007000,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l6 (view),kernel_set_rows_f16_i64,0.006200,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-6,flash_attn_f32_f16,26.634100,128x28x0,32x1x0,128x28x101x1
+ffn_inp-6,kernel_add,0.068100,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-6,kernel_rms_norm_mul,0.037900,103424x1x1,1024x1x1,3584x101x1x1
+l_out-6,kernel_add,0.059100,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-7,kernel_rms_norm_mul,0.038700,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-7,kernel_add_row,0.034100,90496x0x0,64x0x0,3584x101x1x1
+Qcur-7,kernel_rope_neox_f32,0.038200,1792x101x1,64x1x1,128x28x101x1
+Kcur-7,kernel_add_row,0.007500,12928x0x0,64x0x0,512x101x1x1
+Kcur-7,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-7,kernel_add_row,0.006700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l7 (view),kernel_set_rows_f16_i64,0.007300,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l7 (view),kernel_set_rows_f16_i64,0.006100,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-7,flash_attn_f32_f16,26.562201,128x28x0,32x1x0,128x28x101x1
+ffn_inp-7,kernel_add,0.101500,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-7,kernel_rms_norm_mul,0.036900,103424x1x1,1024x1x1,3584x101x1x1
+l_out-7,kernel_add,0.060700,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-8,kernel_rms_norm_mul,0.038200,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-8,kernel_add_row,0.033700,90496x0x0,64x0x0,3584x101x1x1
+Qcur-8,kernel_rope_neox_f32,0.034600,1792x101x1,64x1x1,128x28x101x1
+Kcur-8,kernel_add_row,0.005700,12928x0x0,64x0x0,512x101x1x1
+Kcur-8,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_284,kernel_mul_mv_q6_K_f32,5.938200,512x6464x1,2x64x1,512x101x1x1
+Vcur-8,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l8 (view),kernel_set_rows_f16_i64,0.007600,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l8 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-8,flash_attn_f32_f16,26.762699,128x28x0,32x1x0,128x28x101x1
+ffn_inp-8,kernel_add,0.063800,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-8,kernel_rms_norm_mul,0.036300,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-8,kernel_swiglu,0.330000,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-8,kernel_mul_mv_q6_K_f32,208.969910,3584x6464x1,2x64x1,3584x101x1x1
+l_out-8,kernel_add,0.055500,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-9,kernel_rms_norm_mul,0.039500,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-9,kernel_add_row,0.075400,90496x0x0,64x0x0,3584x101x1x1
+Qcur-9,kernel_rope_neox_f32,0.038300,1792x101x1,64x1x1,128x28x101x1
+Kcur-9,kernel_add_row,0.008100,12928x0x0,64x0x0,512x101x1x1
+Kcur-9,kernel_rope_neox_f32,0.005300,256x101x1,64x1x1,128x4x101x1
+Vcur-9,kernel_add_row,0.007000,12928x0x0,64x0x0,512x101x1x1
+cache_k_l9 (view),kernel_set_rows_f16_i64,0.007400,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l9 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-9,flash_attn_f32_f16,26.643900,128x28x0,32x1x0,128x28x101x1
+ffn_inp-9,kernel_add,0.106600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-9,kernel_rms_norm_mul,0.036200,103424x1x1,1024x1x1,3584x101x1x1
+l_out-9,kernel_add,0.067600,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-10,kernel_rms_norm_mul,0.037800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-10,kernel_add_row,0.034400,90496x0x0,64x0x0,3584x101x1x1
+Qcur-10,kernel_rope_neox_f32,0.037700,1792x101x1,64x1x1,128x28x101x1
+Kcur-10,kernel_add_row,0.007900,12928x0x0,64x0x0,512x101x1x1
+Kcur-10,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-10,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l10 (view),kernel_set_rows_f16_i64,0.007400,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l10 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-10,flash_attn_f32_f16,26.632900,128x28x0,32x1x0,128x28x101x1
+ffn_inp-10,kernel_add,0.102100,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-10,kernel_rms_norm_mul,0.036600,103424x1x1,1024x1x1,3584x101x1x1
+l_out-10,kernel_add,0.058700,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-11,kernel_rms_norm_mul,0.039500,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-11,kernel_add_row,0.033900,90496x0x0,64x0x0,3584x101x1x1
+Qcur-11,kernel_rope_neox_f32,0.033800,1792x101x1,64x1x1,128x28x101x1
+Kcur-11,kernel_add_row,0.005800,12928x0x0,64x0x0,512x101x1x1
+Kcur-11,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_386,kernel_mul_mv_q6_K_f32,5.937700,512x6464x1,2x64x1,512x101x1x1
+Vcur-11,kernel_add_row,0.004500,12928x0x0,64x0x0,512x101x1x1
+cache_k_l11 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l11 (view),kernel_set_rows_f16_i64,0.006100,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-11,flash_attn_f32_f16,26.432199,128x28x0,32x1x0,128x28x101x1
+ffn_inp-11,kernel_add,0.061800,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-11,kernel_rms_norm_mul,0.036000,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-11,kernel_swiglu,0.325100,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-11,kernel_mul_mv_q6_K_f32,209.033905,3584x6464x1,2x64x1,3584x101x1x1
+l_out-11,kernel_add,0.058200,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-12,kernel_rms_norm_mul,0.040700,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-12,kernel_add_row,0.076400,90496x0x0,64x0x0,3584x101x1x1
+Qcur-12,kernel_rope_neox_f32,0.037900,1792x101x1,64x1x1,128x28x101x1
+Kcur-12,kernel_add_row,0.007800,12928x0x0,64x0x0,512x101x1x1
+Kcur-12,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-12,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l12 (view),kernel_set_rows_f16_i64,0.007400,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l12 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-12,flash_attn_f32_f16,26.725800,128x28x0,32x1x0,128x28x101x1
+ffn_inp-12,kernel_add,0.102800,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-12,kernel_rms_norm_mul,0.037500,103424x1x1,1024x1x1,3584x101x1x1
+l_out-12,kernel_add,0.064300,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-13,kernel_rms_norm_mul,0.038800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-13,kernel_add_row,0.035200,90496x0x0,64x0x0,3584x101x1x1
+Qcur-13,kernel_rope_neox_f32,0.041100,1792x101x1,64x1x1,128x28x101x1
+Kcur-13,kernel_add_row,0.013900,12928x0x0,64x0x0,512x101x1x1
+Kcur-13,kernel_rope_neox_f32,0.005400,256x101x1,64x1x1,128x4x101x1
+Vcur-13,kernel_add_row,0.011400,12928x0x0,64x0x0,512x101x1x1
+cache_k_l13 (view),kernel_set_rows_f16_i64,0.012700,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l13 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-13,flash_attn_f32_f16,26.974199,128x28x0,32x1x0,128x28x101x1
+ffn_inp-13,kernel_add,0.102500,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-13,kernel_rms_norm_mul,0.036300,103424x1x1,1024x1x1,3584x101x1x1
+l_out-13,kernel_add,0.062300,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-14,kernel_rms_norm_mul,0.039300,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-14,kernel_add_row,0.034300,90496x0x0,64x0x0,3584x101x1x1
+Qcur-14,kernel_rope_neox_f32,0.035300,1792x101x1,64x1x1,128x28x101x1
+Kcur-14,kernel_add_row,0.005900,12928x0x0,64x0x0,512x101x1x1
+Kcur-14,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_488,kernel_mul_mv_q6_K_f32,5.941000,512x6464x1,2x64x1,512x101x1x1
+Vcur-14,kernel_add_row,0.004500,12928x0x0,64x0x0,512x101x1x1
+cache_k_l14 (view),kernel_set_rows_f16_i64,0.007800,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l14 (view),kernel_set_rows_f16_i64,0.006100,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-14,flash_attn_f32_f16,26.650400,128x28x0,32x1x0,128x28x101x1
+ffn_inp-14,kernel_add,0.066200,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-14,kernel_rms_norm_mul,0.036700,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-14,kernel_swiglu,0.326800,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-14,kernel_mul_mv_q6_K_f32,208.766891,3584x6464x1,2x64x1,3584x101x1x1
+l_out-14,kernel_add,0.056900,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-15,kernel_rms_norm_mul,0.039100,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-15,kernel_add_row,0.038300,90496x0x0,64x0x0,3584x101x1x1
+Qcur-15,kernel_rope_neox_f32,0.034900,1792x101x1,64x1x1,128x28x101x1
+Kcur-15,kernel_add_row,0.008200,12928x0x0,64x0x0,512x101x1x1
+Kcur-15,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-15,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l15 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l15 (view),kernel_set_rows_f16_i64,0.006100,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-15,flash_attn_f32_f16,26.576599,128x28x0,32x1x0,128x28x101x1
+ffn_inp-15,kernel_add,0.105100,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-15,kernel_rms_norm_mul,0.035600,103424x1x1,1024x1x1,3584x101x1x1
+l_out-15,kernel_add,0.059000,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-16,kernel_rms_norm_mul,0.038100,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-16,kernel_add_row,0.034900,90496x0x0,64x0x0,3584x101x1x1
+Qcur-16,kernel_rope_neox_f32,0.036000,1792x101x1,64x1x1,128x28x101x1
+Kcur-16,kernel_add_row,0.007800,12928x0x0,64x0x0,512x101x1x1
+Kcur-16,kernel_rope_neox_f32,0.005100,256x101x1,64x1x1,128x4x101x1
+Vcur-16,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l16 (view),kernel_set_rows_f16_i64,0.007200,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l16 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-16,flash_attn_f32_f16,26.736900,128x28x0,32x1x0,128x28x101x1
+ffn_inp-16,kernel_add,0.103300,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-16,kernel_rms_norm_mul,0.036300,103424x1x1,1024x1x1,3584x101x1x1
+l_out-16,kernel_add,0.067600,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-17,kernel_rms_norm_mul,0.039800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-17,kernel_add_row,0.035000,90496x0x0,64x0x0,3584x101x1x1
+Qcur-17,kernel_rope_neox_f32,0.035200,1792x101x1,64x1x1,128x28x101x1
+Kcur-17,kernel_add_row,0.005600,12928x0x0,64x0x0,512x101x1x1
+Kcur-17,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_590,kernel_mul_mv_q6_K_f32,5.939700,512x6464x1,2x64x1,512x101x1x1
+Vcur-17,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l17 (view),kernel_set_rows_f16_i64,0.007600,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l17 (view),kernel_set_rows_f16_i64,0.005900,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-17,flash_attn_f32_f16,26.527000,128x28x0,32x1x0,128x28x101x1
+ffn_inp-17,kernel_add,0.104200,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-17,kernel_rms_norm_mul,0.036700,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-17,kernel_swiglu,0.325500,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-17,kernel_mul_mv_q6_K_f32,208.398102,3584x6464x1,2x64x1,3584x101x1x1
+l_out-17,kernel_add,0.058300,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-18,kernel_rms_norm_mul,0.039300,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-18,kernel_add_row,0.035500,90496x0x0,64x0x0,3584x101x1x1
+Qcur-18,kernel_rope_neox_f32,0.037000,1792x101x1,64x1x1,128x28x101x1
+Kcur-18,kernel_add_row,0.008100,12928x0x0,64x0x0,512x101x1x1
+Kcur-18,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-18,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l18 (view),kernel_set_rows_f16_i64,0.007400,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l18 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-18,flash_attn_f32_f16,26.488501,128x28x0,32x1x0,128x28x101x1
+ffn_inp-18,kernel_add,0.064600,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-18,kernel_rms_norm_mul,0.036500,103424x1x1,1024x1x1,3584x101x1x1
+l_out-18,kernel_add,0.064100,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-19,kernel_rms_norm_mul,0.038400,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-19,kernel_add_row,0.033300,90496x0x0,64x0x0,3584x101x1x1
+Qcur-19,kernel_rope_neox_f32,0.038800,1792x101x1,64x1x1,128x28x101x1
+Kcur-19,kernel_add_row,0.008100,12928x0x0,64x0x0,512x101x1x1
+Kcur-19,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-19,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l19 (view),kernel_set_rows_f16_i64,0.007300,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l19 (view),kernel_set_rows_f16_i64,0.005800,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-19,flash_attn_f32_f16,26.691200,128x28x0,32x1x0,128x28x101x1
+ffn_inp-19,kernel_add,0.097100,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-19,kernel_rms_norm_mul,0.036600,103424x1x1,1024x1x1,3584x101x1x1
+l_out-19,kernel_add,0.068800,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-20,kernel_rms_norm_mul,0.038100,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-20,kernel_add_row,0.035200,90496x0x0,64x0x0,3584x101x1x1
+Qcur-20,kernel_rope_neox_f32,0.036200,1792x101x1,64x1x1,128x28x101x1
+Kcur-20,kernel_add_row,0.005800,12928x0x0,64x0x0,512x101x1x1
+Kcur-20,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_692,kernel_mul_mv_q6_K_f32,5.940200,512x6464x1,2x64x1,512x101x1x1
+Vcur-20,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l20 (view),kernel_set_rows_f16_i64,0.007700,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l20 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-20,flash_attn_f32_f16,26.653200,128x28x0,32x1x0,128x28x101x1
+ffn_inp-20,kernel_add,0.059500,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-20,kernel_rms_norm_mul,0.036900,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-20,kernel_swiglu,0.320800,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-20,kernel_mul_mv_q6_K_f32,208.406891,3584x6464x1,2x64x1,3584x101x1x1
+l_out-20,kernel_add,0.056600,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-21,kernel_rms_norm_mul,0.038500,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-21,kernel_add_row,0.037200,90496x0x0,64x0x0,3584x101x1x1
+Qcur-21,kernel_rope_neox_f32,0.036900,1792x101x1,64x1x1,128x28x101x1
+Kcur-21,kernel_add_row,0.008000,12928x0x0,64x0x0,512x101x1x1
+Kcur-21,kernel_rope_neox_f32,0.005300,256x101x1,64x1x1,128x4x101x1
+Vcur-21,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l21 (view),kernel_set_rows_f16_i64,0.007300,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l21 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-21,flash_attn_f32_f16,26.648399,128x28x0,32x1x0,128x28x101x1
+ffn_inp-21,kernel_add,0.101400,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-21,kernel_rms_norm_mul,0.037200,103424x1x1,1024x1x1,3584x101x1x1
+l_out-21,kernel_add,0.060200,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-22,kernel_rms_norm_mul,0.039300,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-22,kernel_add_row,0.033700,90496x0x0,64x0x0,3584x101x1x1
+Qcur-22,kernel_rope_neox_f32,0.037500,1792x101x1,64x1x1,128x28x101x1
+Kcur-22,kernel_add_row,0.007600,12928x0x0,64x0x0,512x101x1x1
+Kcur-22,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+Vcur-22,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l22 (view),kernel_set_rows_f16_i64,0.007300,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l22 (view),kernel_set_rows_f16_i64,0.005900,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-22,flash_attn_f32_f16,26.626499,128x28x0,32x1x0,128x28x101x1
+ffn_inp-22,kernel_add,0.067300,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-22,kernel_rms_norm_mul,0.036500,103424x1x1,1024x1x1,3584x101x1x1
+l_out-22,kernel_add,0.061100,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-23,kernel_rms_norm_mul,0.037700,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-23,kernel_add_row,0.035300,90496x0x0,64x0x0,3584x101x1x1
+Qcur-23,kernel_rope_neox_f32,0.038200,1792x101x1,64x1x1,128x28x101x1
+Kcur-23,kernel_add_row,0.005900,12928x0x0,64x0x0,512x101x1x1
+Kcur-23,kernel_rope_neox_f32,0.005000,256x101x1,64x1x1,128x4x101x1
+node_794,kernel_mul_mv_q6_K_f32,5.941500,512x6464x1,2x64x1,512x101x1x1
+Vcur-23,kernel_add_row,0.004600,12928x0x0,64x0x0,512x101x1x1
+cache_k_l23 (view),kernel_set_rows_f16_i64,0.007700,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l23 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-23,flash_attn_f32_f16,26.571699,128x28x0,32x1x0,128x28x101x1
+ffn_inp-23,kernel_add,0.098000,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-23,kernel_rms_norm_mul,0.036200,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-23,kernel_swiglu,0.336200,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-23,kernel_mul_mv_q6_K_f32,208.738800,3584x6464x1,2x64x1,3584x101x1x1
+l_out-23,kernel_add,0.057800,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-24,kernel_rms_norm_mul,0.039200,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-24,kernel_add_row,0.038000,90496x0x0,64x0x0,3584x101x1x1
+Qcur-24,kernel_rope_neox_f32,0.037800,1792x101x1,64x1x1,128x28x101x1
+Kcur-24,kernel_add_row,0.008000,12928x0x0,64x0x0,512x101x1x1
+Kcur-24,kernel_rope_neox_f32,0.005300,256x101x1,64x1x1,128x4x101x1
+node_828,kernel_mul_mv_q6_K_f32,5.936200,512x6464x1,2x64x1,512x101x1x1
+Vcur-24,kernel_add_row,0.004800,12928x0x0,64x0x0,512x101x1x1
+cache_k_l24 (view),kernel_set_rows_f16_i64,0.007100,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l24 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-24,flash_attn_f32_f16,26.756001,128x28x0,32x1x0,128x28x101x1
+ffn_inp-24,kernel_add,0.070100,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-24,kernel_rms_norm_mul,0.036300,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-24,kernel_swiglu,0.328000,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-24,kernel_mul_mv_q6_K_f32,208.844604,3584x6464x1,2x64x1,3584x101x1x1
+l_out-24,kernel_add,0.058800,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-25,kernel_rms_norm_mul,0.040000,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-25,kernel_add_row,0.038200,90496x0x0,64x0x0,3584x101x1x1
+Qcur-25,kernel_rope_neox_f32,0.037100,1792x101x1,64x1x1,128x28x101x1
+Kcur-25,kernel_add_row,0.006000,12928x0x0,64x0x0,512x101x1x1
+Kcur-25,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_862,kernel_mul_mv_q6_K_f32,5.937100,512x6464x1,2x64x1,512x101x1x1
+Vcur-25,kernel_add_row,0.004300,12928x0x0,64x0x0,512x101x1x1
+cache_k_l25 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l25 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-25,flash_attn_f32_f16,26.690901,128x28x0,32x1x0,128x28x101x1
+ffn_inp-25,kernel_add,0.099400,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-25,kernel_rms_norm_mul,0.035100,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-25,kernel_swiglu,0.323100,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-25,kernel_mul_mv_q6_K_f32,209.213898,3584x6464x1,2x64x1,3584x101x1x1
+l_out-25,kernel_add,0.056800,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-26,kernel_rms_norm_mul,0.039000,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-26,kernel_add_row,0.069700,90496x0x0,64x0x0,3584x101x1x1
+Qcur-26,kernel_rope_neox_f32,0.035500,1792x101x1,64x1x1,128x28x101x1
+Kcur-26,kernel_add_row,0.008000,12928x0x0,64x0x0,512x101x1x1
+Kcur-26,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_896,kernel_mul_mv_q6_K_f32,5.940700,512x6464x1,2x64x1,512x101x1x1
+Vcur-26,kernel_add_row,0.004600,12928x0x0,64x0x0,512x101x1x1
+cache_k_l26 (view),kernel_set_rows_f16_i64,0.007500,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l26 (view),kernel_set_rows_f16_i64,0.005900,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-26,flash_attn_f32_f16,26.804701,128x28x0,32x1x0,128x28x101x1
+ffn_inp-26,kernel_add,0.067000,6464x1x1,64x1x1,3584x101x1x1
+ffn_norm-26,kernel_rms_norm_mul,0.036400,103424x1x1,1024x1x1,3584x101x1x1
+ffn_swiglu-26,kernel_swiglu,0.323200,51712x1x1,512x1x1,18944x101x1x1
+ffn_out-26,kernel_mul_mv_q6_K_f32,208.687698,3584x6464x1,2x64x1,3584x101x1x1
+l_out-26,kernel_add,0.056200,6464x1x1,64x1x1,3584x101x1x1
+attn_norm-27,kernel_rms_norm_mul,0.038800,103424x1x1,1024x1x1,3584x101x1x1
+Qcur-27,kernel_add_row,0.037100,90496x0x0,64x0x0,3584x101x1x1
+Qcur-27,kernel_rope_neox_f32,0.035700,1792x101x1,64x1x1,128x28x101x1
+Kcur-27,kernel_add_row,0.007900,12928x0x0,64x0x0,512x101x1x1
+Kcur-27,kernel_rope_neox_f32,0.005200,256x101x1,64x1x1,128x4x101x1
+node_930,kernel_mul_mv_q6_K_f32,5.942600,512x6464x1,2x64x1,512x101x1x1
+Vcur-27,kernel_add_row,0.004700,12928x0x0,64x0x0,512x101x1x1
+cache_k_l27 (view),kernel_set_rows_f16_i64,0.007400,51712x1x1,512x1x1,512x4096x1x1
+cache_v_l27 (view),kernel_set_rows_f16_i64,0.006000,51712x1x1,512x1x1,512x4096x1x1
+__fattn__-27,flash_attn_f32_f16,26.663799,128x28x0,32x1x0,128x28x101x1
+node_946,kernel_get_rows_f32,0.018000,64x1x1,64x1x1,3584x1x1x1
+node_947,kernel_get_rows_f32,0.015400,64x1x1,64x1x1,3584x1x1x1
+ffn_inp-27,kernel_add_row,0.002200,896x0x0,64x0x0,3584x1x1x1
+ffn_norm-27,kernel_rms_norm_mul,0.006000,1024x1x1,1024x1x1,3584x1x1x1
+ffn_swiglu-27,kernel_swiglu,0.017400,512x1x1,512x1x1,18944x1x1x1
+ffn_out-27,kernel_mul_mv_q6_K_f32,2.504200,3584x64x1,2x64x1,3584x1x1x1
+l_out-27,kernel_add_row,0.002700,896x0x0,64x0x0,3584x1x1x1
+result_norm,kernel_rms_norm_mul,0.006200,1024x1x1,1024x1x1,3584x1x1x1
+result_output,kernel_mul_mv_q6_K_f32,20.278500,152064x64x1,2x64x1,152064x1x1x1

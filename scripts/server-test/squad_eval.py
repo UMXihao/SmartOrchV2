@@ -132,7 +132,7 @@ headers = {"Content-Type": "application/json"}
 
 squad_val = load_dataset("squad", split="validation")
 
-for i in tqdm(range(100)):
+for i in tqdm(range(1000)):
     # for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]
@@ -141,16 +141,16 @@ for i in tqdm(range(100)):
     data = {"prompt": input_text, "n_predict": 1, "stop": "\n"}
 
     requests.post(url, headers=headers, json=data)
-
-    # 整合prefill的采集文件
-    moe_activation_output = "moe_activation_request_" + str(i) + ".csv"
-    merge_moe_files("/home/lili-5090/Sean/SmartOrchV2", moe_activation_output)
-
-    # 融合完删除prefill的采集文件
-    delete_moe_files("/home/lili-5090/Sean/SmartOrchV2")
-
-    # top6 选择
-    top6(moe_activation_output, i)
+    #
+    # # 整合prefill的采集文件
+    # moe_activation_output = "moe_activation_request_" + str(i) + ".csv"
+    # merge_moe_files("/home/lili-5090/Sean/SmartOrchV2", moe_activation_output)
+    #
+    # # 融合完删除prefill的采集文件
+    # delete_moe_files("/home/lili-5090/Sean/SmartOrchV2")
+    #
+    # # top6 选择
+    # top6(moe_activation_output, i)
 
 # if __name__ == "__main__":
 #     main()

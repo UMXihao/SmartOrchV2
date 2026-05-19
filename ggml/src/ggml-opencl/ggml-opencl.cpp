@@ -29,6 +29,10 @@
 #include <charconv>
 #include <mutex>
 
+#ifdef GGML_TOKEN_STAT
+#include <unordered_map>
+#endif
+
 static std::atomic<uint64_t> g_opencl_kernel_dispatch_count{0};
 
 // 添加获取计数的 API
@@ -691,8 +695,8 @@ static void ggml_cl_record_moe_prefill_token_stats(
     const int top_k    = (int) ids->ne[0];
     const int n_tokens = (int) ids->ne[1];
 
-    if (std::strncmp(dst->name, "ffn_moe_down-", 13) != 0) {
-        return;
+    if (dst == nullptr || std::strcmp(dst->name, "ffn_moe_down-13") != 0) {
+        return; // 直接退出当前函数
     }
 
     // 只统计 prefill；decode 时 n_tokens 通常为 1

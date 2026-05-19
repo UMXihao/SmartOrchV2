@@ -256,18 +256,19 @@ cmake \
 
 cmake --build build-android --config Release -j 22
 
-mkdir mac-gpu
+mkdir OpenCL-Profiling
 
-cmake --install build-android --prefix mac-gpu/ --config Release
+cmake --install build-android --prefix OpenCL-Profiling/ --config Release
 
-adb push mac-gpu /data/local/tmp/
+adb push OpenCL-Profiling/ /data/local/tmp/
 adb shell
 
-cd /data/local/tmp/mac-gpu
+cd /data/local/tmp/OpenCL-Profiling
 
-LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 10 -no-cnv -f ../split-cpu/fix-token.txt --no-display-prompt --no-warmup -ngl 30
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 16
 ```
 
+# Trigger mobile server to finish datasets latency
 
 - mobile phone:
 
@@ -280,3 +281,42 @@ LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.g
 - computer
 
 adb forward tcp:8080 tcp:8080
+
+# GGML_OPENCL_PROFILING to profiling kernel launch
+cmake \
+-DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
+-DANDROID_ABI=arm64-v8a \
+-DANDROID_PLATFORM=android-28 \
+-DBUILD_SHARED_LIBS=OFF \
+-DLLAMA_CURL=OFF \
+-DCMAKE_CXX_FLAGS="-DGGML_OPENCL_PROFILING" \
+-DGGML_OPENCL=ON \
+-DGGML_OPENMP=OFF \
+-B build-android
+
+cmake --build build-android --config Release -j 22
+
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 16
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 32
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 64
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 128
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 256
+LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf -n 1 -no-cnv -f ../models/fix-token.txt --no-display-prompt --no-warmup -ngl 30 -ub 512
+
+# GGML_TOKEN_STAT to profiling token-per-expert
+cmake \
+-DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
+-DANDROID_ABI=arm64-v8a \
+-DANDROID_PLATFORM=android-28 \
+-DBUILD_SHARED_LIBS=OFF \
+-DLLAMA_CURL=OFF \
+-DCMAKE_CXX_FLAGS="-DGGML_TOKEN_STAT" \
+-DGGML_OPENCL=ON \
+-DGGML_OPENMP=OFF \
+-B build-android
+
+cmake --build build-android --config Release -j 22
+
+mkdir token-stat
+
+cmake --install build-android --prefix token-stat/ --config Release
