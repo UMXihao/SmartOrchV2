@@ -104,7 +104,7 @@ llama_context::llama_context(
         cparams.n_batch = GGML_KQ_MASK_PAD;
     }
     cparams.n_ubatch = std::min(cparams.n_batch, params.n_ubatch == 0 ? params.n_batch : params.n_ubatch);
-
+    cparams.n_attn_heads = params.n_attn_heads;
     cparams.op_offload = params.op_offload;
     cparams.kv_unified = params.kv_unified;
 
@@ -1473,6 +1473,7 @@ llm_graph_params llama_context::graph_params(
         /*.mctx        =*/ mctx,
         /*.cross       =*/ &cross,
         /*.n_outputs   =*/ n_outputs,
+        /*.n_attn_heads=*/ cparams.n_attn_heads,
         /*.cb          =*/ graph_get_cb(),
         /*.res         =*/ res,
     };

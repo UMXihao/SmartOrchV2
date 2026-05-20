@@ -418,6 +418,8 @@ struct llm_graph_params {
 
     uint32_t n_outputs;
 
+    int n_attn_heads;
+
     llm_graph_cb cb;
 
     llm_graph_result * res;
@@ -553,6 +555,8 @@ struct llm_graph_context {
     const int64_t n_embd_v_gqa;
     const int64_t n_expert;
     const int64_t n_expert_used;
+
+    const int n_attn_heads;
 
     const float freq_base;
     const float freq_scale;
@@ -826,6 +830,13 @@ struct llm_graph_context {
     void build_dense_out(
             ggml_tensor * dense_2,
             ggml_tensor * dense_3) const;
+
+    int64_t n_attn_head_q_active() const;
+    int64_t n_attn_head_kv_active() const;
+
+    ggml_tensor * build_attn_head_view_q(ggml_tensor * q) const;
+    ggml_tensor * build_attn_head_view_kv(ggml_tensor * kv, int64_t n_head_kv_active) const;
+    ggml_tensor * build_attn_wo_view(ggml_tensor * wo, int64_t n_head_q_active) const;
 };
 
 // TODO: better name

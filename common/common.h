@@ -509,6 +509,8 @@ struct common_params {
     llama_progress_callback load_progress_callback = NULL;
     void *                  load_progress_callback_user_data = NULL;
 
+    int n_attn_heads;
+
     bool has_speculative() const {
         return !speculative.model.path.empty() || !speculative.model.hf_repo.empty();
     }

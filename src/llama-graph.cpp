@@ -568,6 +568,7 @@ llm_graph_context::llm_graph_context(const llm_graph_params & params) :
     n_embd_v_gqa     (hparams.n_embd_v_gqa()),
     n_expert         (hparams.n_expert),
     n_expert_used    (cparams.warmup ? hparams.n_expert : hparams.n_expert_used),
+    n_attn_heads     (params.n_attn_heads),
     freq_base        (cparams.rope_freq_base),
     freq_scale       (cparams.rope_freq_scale),
     ext_factor       (cparams.yarn_ext_factor),
@@ -1559,10 +1560,30 @@ ggml_tensor * llm_graph_context::build_attn(
     ggml_tensor * k = k_cur;
     ggml_tensor * v = v_cur;
 
+    const int64_t n_head_q_active  = n_attn_head_q_active();
+    const int64_t n_head_kv_active = n_attn_head_kv_active();
+
+    if (n_head_q_active != n_head) {
+        q = build_attn_head_view_q(q);
+        k = build_attn_head_view_kv(k, n_head_kv_active);
+        v = build_attn_head_view_kv(v, n_head_kv_active);
+
+        if (sinks) {
+            sinks = ggml_view_1d(ctx0, sinks, n_head_q_active, 0);
+        }
+
+        if (v_mla) {
+            // MLA / special attention 先不支持 head 裁剪，避免 silent wrong result。
+            GGML_ABORT("n_attn_heads is not supported with v_mla");
+        }
+    }
+
     ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, sinks, v_mla, kq_scale, il);
     cb(cur, "kqv_out", il);
 
     if (wo) {
+        cur = build_lora_mm(wo, cur);
+        wo = build_attn_wo_view(wo, n_head_q_active);
         cur = build_lora_mm(wo, cur);
     }
 
@@ -1648,10 +1669,30 @@ ggml_tensor * llm_graph_context::build_attn(
     ggml_tensor * k = mctx_cur->get_k(ctx0, il);
     ggml_tensor * v = mctx_cur->get_v(ctx0, il);
 
+    const int64_t n_head_q_active  = n_attn_head_q_active();
+    const int64_t n_head_kv_active = n_attn_head_kv_active();
+
+    if (n_head_q_active != n_head) {
+        LLAMA_LOG_INFO("%s: n_attn_heads %d inputs:\n", __func__, (int) n_head_q_active);
+        q = build_attn_head_view_q(q);
+        k = build_attn_head_view_kv(k, n_head_kv_active);
+        v = build_attn_head_view_kv(v, n_head_kv_active);
+
+        if (sinks) {
+            sinks = ggml_view_1d(ctx0, sinks, n_head_q_active, 0);
+        }
+
+        if (v_mla) {
+            // MLA / special attention 先不支持 head 裁剪，避免 silent wrong result。
+            GGML_ABORT("n_attn_heads is not supported with v_mla");
+        }
+    }
+
     ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, sinks, v_mla, kq_scale, il);
     cb(cur, "kqv_out", il);
 
     if (wo) {
+        wo = build_attn_wo_view(wo, n_head_q_active);
         cur = build_lora_mm(wo, cur);
         if (arch == LLM_ARCH_GLM4 || arch == LLM_ARCH_GLM4_MOE) {
             // GLM4 and GLM4_MOE seem to have numerical issues with half-precision accumulators
@@ -1715,10 +1756,29 @@ ggml_tensor * llm_graph_context::build_attn(
     ggml_tensor * k = mctx_cur->get_k(ctx0, il);
     ggml_tensor * v = mctx_cur->get_v(ctx0, il);
 
+    const int64_t n_head_q_active  = n_attn_head_q_active();
+    const int64_t n_head_kv_active = n_attn_head_kv_active();
+
+    if (n_head_q_active != n_head) {
+        q = build_attn_head_view_q(q);
+        k = build_attn_head_view_kv(k, n_head_kv_active);
+        v = build_attn_head_view_kv(v, n_head_kv_active);
+
+        if (sinks) {
+            sinks = ggml_view_1d(ctx0, sinks, n_head_q_active, 0);
+        }
+
+        if (v_mla) {
+            // MLA / special attention 先不支持 head 裁剪，避免 silent wrong result。
+            GGML_ABORT("n_attn_heads is not supported with v_mla");
+        }
+    }
+
     ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, sinks, v_mla, kq_scale, il);
     cb(cur, "kqv_out", il);
 
     if (wo) {
+        wo = build_attn_wo_view(wo, n_head_q_active);
         cur = build_lora_mm(wo, cur);
     }
 
@@ -1770,10 +1830,29 @@ ggml_tensor * llm_graph_context::build_attn(
     ggml_tensor * k = k_cur;
     ggml_tensor * v = v_cur;
 
+    const int64_t n_head_q_active  = n_attn_head_q_active();
+    const int64_t n_head_kv_active = n_attn_head_kv_active();
+
+    if (n_head_q_active != n_head) {
+        q = build_attn_head_view_q(q);
+        k = build_attn_head_view_kv(k, n_head_kv_active);
+        v = build_attn_head_view_kv(v, n_head_kv_active);
+
+        if (sinks) {
+            sinks = ggml_view_1d(ctx0, sinks, n_head_q_active, 0);
+        }
+
+        if (v_mla) {
+            // MLA / special attention 先不支持 head 裁剪，避免 silent wrong result。
+            GGML_ABORT("n_attn_heads is not supported with v_mla");
+        }
+    }
+
     ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, sinks, v_mla, kq_scale, il);
     cb(cur, "kqv_out", il);
 
     if (wo) {
+        wo = build_attn_wo_view(wo, n_head_q_active);
         cur = build_lora_mm(wo, cur);
     }
 
@@ -2080,4 +2159,90 @@ int32_t llama_relative_position_bucket(llama_pos x, llama_pos y, uint64_t n_buck
     relative_bucket += (relative_position < max_exact ? relative_position : relative_position_if_large);
 
     return relative_bucket;
+}
+
+int64_t llm_graph_context::n_attn_head_q_active() const {
+    if (cparams.n_attn_heads == 0) {
+        return n_head;
+    }
+
+    return std::min<int64_t>(cparams.n_attn_heads, n_head);
+}
+
+int64_t llm_graph_context::n_attn_head_kv_active() const {
+    const int64_t n_head_q_active = n_attn_head_q_active();
+
+    if (n_head_q_active == n_head) {
+        return n_head_kv;
+    }
+
+    GGML_ASSERT(n_head % n_head_kv == 0);
+    const int64_t n_gqa = n_head / n_head_kv;
+
+    // 只保留覆盖 active Q heads 所需的 KV heads。
+    return std::min<int64_t>(n_head_kv, (n_head_q_active + n_gqa - 1) / n_gqa);
+}
+
+ggml_tensor * llm_graph_context::build_attn_head_view_q(ggml_tensor * q) const {
+    const int64_t n_head_q_active = n_attn_head_q_active();
+
+    if (n_head_q_active == q->ne[1]) {
+        return q;
+    }
+
+    GGML_ASSERT(q->ne[1] >= n_head_q_active);
+
+    return ggml_cont(ctx0, ggml_view_3d(
+        ctx0,
+        q,
+        q->ne[0],
+        n_head_q_active,
+        q->ne[2],
+        q->nb[1],
+        q->nb[2],
+        0
+    ));
+}
+
+ggml_tensor * llm_graph_context::build_attn_head_view_kv(
+        ggml_tensor * kv,
+        int64_t n_head_kv_active) const {
+    if (n_head_kv_active == kv->ne[1]) {
+        return kv;
+    }
+
+    GGML_ASSERT(kv->ne[1] >= n_head_kv_active);
+
+    return ggml_cont(ctx0, ggml_view_3d(
+        ctx0,
+        kv,
+        kv->ne[0],
+        n_head_kv_active,
+        kv->ne[2],
+        kv->nb[1],
+        kv->nb[2],
+        0
+    ));
+}
+
+ggml_tensor * llm_graph_context::build_attn_wo_view(
+        ggml_tensor * wo,
+        int64_t n_head_q_active) const {
+    if (wo == nullptr || n_head_q_active == n_head) {
+        return wo;
+    }
+
+    // attention 输出进入 WO 前是 [head_dim_v * active_heads, n_tokens]
+    const int64_t n_embd_attn_active = n_embd_head_v * n_head_q_active;
+
+    GGML_ASSERT(wo->ne[0] >= n_embd_attn_active);
+
+    return ggml_view_2d(
+        ctx0,
+        wo,
+        n_embd_attn_active, // input columns kept
+        wo->ne[1],          // output dim stays n_embd
+        wo->nb[1],
+        0
+    );
 }

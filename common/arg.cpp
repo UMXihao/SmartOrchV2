@@ -3154,5 +3154,18 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
         }
     ).set_examples({LLAMA_EXAMPLE_SERVER}));
 
+    add_opt(common_arg(
+    {"--attn-heads"},
+    "N",
+    "number of attention query heads to compute, 0 = all",
+    [](common_params & params, int value) {
+        if (value < 0) {
+            throw std::invalid_argument("attn-heads must be >= 0");
+        }
+        params.n_attn_heads = value;
+    }
+    ).set_excludes({LLAMA_EXAMPLE_SERVER}));
+
+
     return ctx_arg;
 }

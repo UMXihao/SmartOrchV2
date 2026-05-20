@@ -135,32 +135,6 @@ cmake --build build --config Release -j 22
 [split-run] id=0 copy=0.000 ms compute=0.112 ms total=0.112 ms
 [split-run] id=1 copy=16.634 ms compute=8.129 ms total=24.763 ms
 ```
-- Dynamic Graph Result
-```
-CUDA计算速度太快等不到数据加载
-/home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-backend.cpp:1492: GGML_ASSERT(id >= 0 && id < n_expert) failed
-[New LWP 2428826]
-[New LWP 2428831]
-[New LWP 2428832]
-[New LWP 2428833]
-[New LWP 2428834]
-[New LWP 2428835]
-[New LWP 2428836]
-[Thread debugging using libthread_db enabled]
-
-
-/home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-cuda/ggml-cuda.cu:89: CUDA error
-CUDA error: an illegal memory access was encountered
-  current device: 0, in function launch_mul_mat_q at /home/lili-5090/Sean/SmartOrchV2/ggml/src/ggml-cuda/template-instances/../mmq.cuh:3559
-  cudaFuncSetAttribute((mul_mat_q<type, mmq_x, false>), cudaFuncAttributeMaxDynamicSharedMemorySize, nbytes_shared)
-[New LWP 2432251]
-[New LWP 2432260]
-[New LWP 2432261]
-[New LWP 2432262]
-[Thread debugging using libthread_db enabled]
-
-```
-
 
 ### CPU Compile
 ```
@@ -320,3 +294,6 @@ cmake --build build-android --config Release -j 22
 mkdir token-stat
 
 cmake --install build-android --prefix token-stat/ --config Release
+
+# Head Skip
+./build/bin/llama-cli -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0 --override-kv deepseek2.expert_used_count=int:6 -f fix-token.txt -no-cnv
