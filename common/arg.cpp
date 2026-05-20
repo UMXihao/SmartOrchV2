@@ -3164,7 +3164,7 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
         }
         params.n_attn_heads = value;
     }
-    ).set_excludes({LLAMA_EXAMPLE_SERVER}));
+    ).set_excludes({LLAMA_EXAMPLE_MAIN}));
 
 
     return ctx_arg;
