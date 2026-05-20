@@ -32,7 +32,7 @@ prefill = []
 decode = []
 
 start_time = time.time()
-for i in tqdm(range(10)):
+for i in tqdm(range(100)):
 #for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]
@@ -45,9 +45,12 @@ for i in tqdm(range(10)):
 
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
+    predict = response.json().get("content")
 
+    # print("answers: ", answers)
+    # print("predictions: ", predict)
     reference = {'answers': answers, 'id': question_id}
-    prediction = {'prediction_text': response.json().get("content"), 'id': question_id}
+    prediction = {'prediction_text': predict, 'id': question_id}
     prompt_ms = response.json().get("timings").get("prompt_ms")
     predicted_per_token_ms = response.json().get("timings").get("predicted_per_token_ms")
     # print("TTFT: ", prompt_ms, " TPOT: ", predicted_per_token_ms)
