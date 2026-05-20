@@ -296,4 +296,4 @@ mkdir token-stat
 cmake --install build-android --prefix token-stat/ --config Release
 
 # Head Skip
-./build/bin/llama-cli -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0 --override-kv deepseek2.expert_used_count=int:6 -f fix-token.txt -no-cnv
+./build/bin/llama-cli -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 4 --override-kv deepseek2.expert_used_count=int:1 -f fix-token.txt -no-cnv
