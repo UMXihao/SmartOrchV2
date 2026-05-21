@@ -509,7 +509,7 @@ python train_llama_prefill_rl.py \
   --mode train \
   --llama-cli /home/lili-5090/Sean/SmartOrchV2/build/bin/llama-cli \
   --model /home/lili-5090/Sean/llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf \
-  --prompt-file /home/lili-5090/Sean/SmartOrchV2/fix-token.txt \
+  --prompt-file /home/lili-5090/Sean/SmartOrchV2/fix-long-token.txt \
   --attn-heads-candidates 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 \
   --expert-candidates 1,2,3,4,5,6 \
   --episodes 300 \
