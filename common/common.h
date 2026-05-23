@@ -299,6 +299,7 @@ struct common_params {
     int32_t n_gpu_layers      = -1;  // number of layers to store in VRAM (-1 - use default)
     int32_t main_gpu          = 0;   // the GPU that is used for scratch and small tensors
     float   tensor_split[128] = {0}; // how split tensors should be distributed across GPUs
+    int skip_layer[128] = {};
 
     enum llama_split_mode split_mode = LLAMA_SPLIT_MODE_LAYER; // how to split the model across GPUs
 

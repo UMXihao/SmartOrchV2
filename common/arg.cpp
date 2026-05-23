@@ -3155,7 +3155,7 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
     ).set_examples({LLAMA_EXAMPLE_SERVER}));
 
     add_opt(common_arg(
-    {"--attn-heads"},
+    {"-ah", "--attn-heads"},
     "N",
     "number of attention query heads to compute, 0 = all",
     [](common_params & params, int value) {
@@ -3166,6 +3166,22 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
     }
     ).set_examples({LLAMA_EXAMPLE_MAIN, LLAMA_EXAMPLE_SERVER}));
 
+    add_opt(common_arg(
+        {"-sl", "--skip-layer"}, "N0,N1,N2,...",
+        "skip the execution of the specified layers, e.g. 1,2,3",
+        [](common_params & params, const std::string & value) {
+            std::string arg_next = value;
+
+            // split string by ,
+            const std::regex regex{ R"([,]+)" };
+            std::sregex_token_iterator it{ arg_next.begin(), arg_next.end(), regex, -1 };
+            std::vector<std::string> split_arg{ it, {} };
+
+            for (size_t i = 0; i < split_arg.size(); ++i) {
+                params.skip_layer[i] = std::stoi(split_arg[i]);
+            }
+        }
+        ).set_examples({LLAMA_EXAMPLE_MAIN, LLAMA_EXAMPLE_SERVER}));
 
     return ctx_arg;
 }

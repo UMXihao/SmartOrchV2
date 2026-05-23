@@ -36,10 +36,35 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
 
     ggml_tensor * inp_out_ids = build_inp_out_ids();
 
+    auto & skip_layer = model.params.skip_layer;
+    std::vector<int> skip_layers;
+    for (int i = 0; i < 128; ++i) {
+        // skip_layer stores 1-based layer ids, e.g. 1 means blk.0.
+        if (skip_layer[i] != 0) {
+            skip_layers.push_back(skip_layer[i]);
+        }
+    }
+
+    auto is_skip_layer = [&](int il) -> bool {
+        // il is 0-based in the graph loop, while skip_layers is 1-based.
+        return !skip_layers.empty() &&
+               std::find(skip_layers.begin(), skip_layers.end(), il + 1) != skip_layers.end();
+    };
+
+    int last_active_il = -1;
     for (int il = 0; il < n_layer; ++il) {
-        //  if (il != 0 && il != 1 && il != n_layer - 1) {
-        //     continue;
-        // }
+        if (!is_skip_layer(il)) {
+            last_active_il = il;
+        }
+    }
+
+    bool did_gather_outputs = false;
+
+    for (int il = 0; il < n_layer; ++il) {
+        // skip-layer: identity block.
+        if (is_skip_layer(il)) {
+            continue;
+        }
 
         ggml_tensor * inpSA = inpL;
 
@@ -169,9 +194,12 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
                             Qcur, Kcur, Vcur, nullptr, nullptr, nullptr, kq_scale, il);
             }
         }
-        if (il == n_layer - 1 && inp_out_ids) {
-            cur   = ggml_get_rows(ctx0, cur, inp_out_ids);
+        // Gather output tokens only after the last layer that is actually executed.
+        // This handles skipped tail layers such as 27, 26-27, etc.
+        if (il == last_active_il && inp_out_ids) {
+            cur   = ggml_get_rows(ctx0, cur,   inp_out_ids);
             inpSA = ggml_get_rows(ctx0, inpSA, inp_out_ids);
+            did_gather_outputs = true;
         }
         ggml_tensor * ffn_inp = ggml_add(ctx0, cur, inpSA);
         cb(ffn_inp, "ffn_inp", il);
@@ -224,6 +252,14 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
         inpL = cur;
     }
     cur = inpL;
+
+    // Fallback for the case where every transformer block is skipped, or the
+    // in-loop gather did not run for any other reason. This is safe here because
+    // no later attention block will consume cur as [n_embd, n_tokens].
+    if (!did_gather_outputs && inp_out_ids) {
+        cur = ggml_get_rows(ctx0, cur, inp_out_ids);
+        cb(cur, "result_embd_gather", -1);
+    }
 
     cur = build_norm(cur, model.output_norm, NULL, LLM_NORM_RMS, -1);
 

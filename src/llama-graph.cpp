@@ -1673,7 +1673,7 @@ ggml_tensor * llm_graph_context::build_attn(
     const int64_t n_head_kv_active = n_attn_head_kv_active();
 
     if (n_head_q_active != n_head) {
-        // LLAMA_LOG_INFO("%s: n_attn_heads %d inputs:\n", __func__, (int) n_head_q_active);
+        LLAMA_LOG_INFO("%s: n_attn_heads %d inputs:\n", __func__, (int) n_head_q_active);
         q = build_attn_head_view_q(q);
         k = build_attn_head_view_kv(k, n_head_kv_active);
         v = build_attn_head_view_kv(v, n_head_kv_active);
