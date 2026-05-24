@@ -255,6 +255,7 @@ LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.g
 - computer
 
 adb forward tcp:8080 tcp:8080
+adb forward --remove tcp:8080
 
 # GGML_OPENCL_PROFILING to profiling kernel launch
 cmake \
