@@ -29,6 +29,9 @@ summarization_val = load_dataset(
     split="validation"
 )
 
+# 加载 ROUGE 评测指标
+rouge = evaluate.load("rouge")
+
 predictions = []
 references = []
 prefill = []
@@ -38,6 +41,7 @@ decode = []
 for i in tqdm(range(10)):
     # for i in tqdm(range(len(summarization_val))):
     article = summarization_val[i]["article"]
+    reference_summary = summarization_val[i]["highlights"]
 
     # 构造摘要任务输入
     input_text = (
@@ -55,13 +59,25 @@ for i in tqdm(range(10)):
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     predict = response.json().get("content")
-
+    predictions.append(predict)
+    references.append(reference_summary.strip())
     prompt_ms = response.json().get("timings").get("prompt_ms")
     prompt_per_second = response.json().get("timings").get("prompt_per_second")
     predicted_per_token_ms = response.json().get("timings").get("predicted_per_token_ms")
     prefill.append(prompt_ms)
     token_num.append(prompt_per_second)
     decode.append(predicted_per_token_ms)
+
+# 计算 ROUGE
+results = rouge.compute(
+    predictions=predictions,
+    references=references,
+    use_stemmer=True
+)
+
+print("\n===== 推理精度评测结果 =====")
+for k, v in results.items():
+    print(f"{k}: {v:.4f}")
 
 print("==========PREFILL============")
 print("MEAN = ", trimmed_mean_np(prefill), " ms")

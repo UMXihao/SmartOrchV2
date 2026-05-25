@@ -44,7 +44,7 @@ token_num = []
 decode = []
 
 start_time = time.time()
-for i in tqdm(range(100)):
+for i in tqdm(range(10)):
 #for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]

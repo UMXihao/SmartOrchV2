@@ -303,13 +303,11 @@ cmake --install build-android --prefix token-stat/ --config Release
 ./build/bin/llama-server -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0 -sl 27
 
 # MoE-Offloading
-cmake \
--DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
--DANDROID_ABI=arm64-v8a \
--DANDROID_PLATFORM=android-28 \
--DBUILD_SHARED_LIBS=OFF \
--DLLAMA_CURL=OFF \
--DCMAKE_CXX_FLAGS="-DLLAMA_BACK_CPU" \
--DGGML_OPENCL=ON \
--DGGML_OPENMP=OFF \
--B build-android
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 \
+-ncmoe 2
+
+# MoE-Infinity
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 \
+--moe-n-slots 16 \
+--moe-n-layers 999 \
+--override-tensor '.*ffn_.*_exps.*=CPU'

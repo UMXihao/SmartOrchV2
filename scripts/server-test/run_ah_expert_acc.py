@@ -43,8 +43,10 @@ def build_server_cmd(args: argparse.Namespace, ncmoe: int) -> List[str]:
         args.server_bin,
         "-m",
         args.model,
-        "-ncmoe",
+        "-ah",
         str(ncmoe),
+        "--override-kv",
+        "deepseek2.expert_used_count=int:1",
     ]
 
     # 默认保持你的原始启动命令，不额外向 llama-server 传 --port。
@@ -291,7 +293,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="/home/lili-5090/Sean/llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf")
 
     parser.add_argument("--ncmoe-start", type=int, default=1)
-    parser.add_argument("--ncmoe-end", type=int, default=6)
+    parser.add_argument("--ncmoe-end", type=int, default=16)
 
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8080)
@@ -314,7 +316,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--cooldown", type=float, default=3.0)
 
-    parser.add_argument("--output-dir", default="expert_number_results")
+    parser.add_argument("--output-dir", default="attn_expert_results")
 
     # 例如需要传 llama-server 其他参数：
     # --extra-server-args --ctx-size 4096 --threads 16
@@ -373,7 +375,7 @@ def main() -> int:
         started_at = time.time()
 
         row: Dict = {
-            "ncmoe": ncmoe,
+            "expert": ncmoe,
             "status": "failed",
             "exact_match": None,
             "f1": None,
