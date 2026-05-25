@@ -301,3 +301,15 @@ cmake --install build-android --prefix token-stat/ --config Release
 
 # Skip layer
 ./build/bin/llama-server -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0 -sl 27
+
+# MoE-Offloading
+cmake \
+-DCMAKE_TOOLCHAIN_FILE=$HOME/Sean/Hexagon_SDK/6.4.0.2/tools/android-ndk-r25c/build/cmake/android.toolchain.cmake \
+-DANDROID_ABI=arm64-v8a \
+-DANDROID_PLATFORM=android-28 \
+-DBUILD_SHARED_LIBS=OFF \
+-DLLAMA_CURL=OFF \
+-DCMAKE_CXX_FLAGS="-DLLAMA_BACK_CPU" \
+-DGGML_OPENCL=ON \
+-DGGML_OPENMP=OFF \
+-B build-android
