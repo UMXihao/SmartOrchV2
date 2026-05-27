@@ -38,8 +38,8 @@ for i in tqdm(range(max_samples)):
 
     data = {
         "prompt": input_text,
-        "n_predict": 128,
-        "stop": ["\n\n"]
+        "n_predict": 1024,
+        "stop": ["\n"]
     }
 
     start_time = time.time()

@@ -396,6 +396,8 @@ public:
 // callback that allows us to apply custom logic to each tensor (e.g. ggml-alloc, offloading, etc.)
 using llm_graph_cb = std::function<void(const llama_ubatch & ubatch, ggml_tensor * cur, const char * name, int il)>;
 
+using llama_moe_topk_cb = std::function<void(int il, ggml_tensor * tensor)>;
+
 class llm_graph_result;
 
 struct llm_graph_params {
@@ -423,6 +425,8 @@ struct llm_graph_params {
     llm_graph_cb cb;
 
     llm_graph_result * res;
+
+    llama_moe_topk_cb moe_topk_cb = nullptr;
 
     // return true if the "other" params would result in a graph with the same topology as with the current params
     //   having the same topology allows us to reuse the graph in some cases
@@ -589,6 +593,8 @@ struct llm_graph_context {
 
     ggml_context * ctx0 = nullptr;
     ggml_cgraph  * gf   = nullptr;
+
+    llama_moe_topk_cb moe_topk_cb;
 
     llm_graph_context(const llm_graph_params & params);
     virtual ~llm_graph_context() = default;

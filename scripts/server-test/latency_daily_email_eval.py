@@ -52,7 +52,7 @@ for i in tqdm(range(10)):
 
     data = {
         "prompt": input_text,
-        "n_predict": 128,
+        "n_predict": 10,
         "stop": "\n\n"
     }
 

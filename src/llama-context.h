@@ -3,10 +3,9 @@
 #include "llama.h"
 #include "llama-cparams.h"
 #include "llama-graph.h"
-#include "llama-adapter.h"
-
-#include "ggml-cpp.h"
-#include "ggml-opt.h"
+#ifdef MOE_HIT_RATE
+#include "llama_moe_expert_stat.h"
+#endif
 
 #include <map>
 #include <vector>
@@ -309,4 +308,15 @@ private:
     mutable int32_t n_eval   = 0; // number of eval calls
 
     mutable int32_t n_reused = 0; // number of times the previous graph was reused
+
+#ifdef MOE_HIT_RATE
+    struct llama_moe_topk_ref {
+        int il;
+        ggml_tensor * tensor;
+    };
+
+    std::vector<llama_moe_topk_ref> moe_topk_refs;
+    llama_moe_expert_stat moe_expert_stat;
+#endif
+
 };

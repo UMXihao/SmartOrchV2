@@ -1,11 +1,17 @@
 #include "llama-context.h"
 
-#include "llama-impl.h"
 #include "llama-batch.h"
+#include "llama-impl.h"
 #include "llama-io.h"
 #include "llama-memory.h"
 #include "llama-mmap.h"
 #include "llama-model.h"
+
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #ifdef LLAMA_OPENCL_KERNEL_LAUNCHES
 #include "ggml-opencl.h"
 #endif
@@ -18,6 +24,45 @@
 //
 // llama_context
 //
+
+static std::vector<std::vector<int>> load_expert_list(const std::string & path) {
+    std::ifstream fin(path);
+    if (!fin) {
+        throw std::runtime_error("failed to open expert list file");
+    }
+
+    std::vector<std::vector<int>> result;
+    std::string line;
+
+    while (std::getline(fin, line)) {
+        for (char & c : line) {
+            if (c == '[' || c == ']' || c == ',') {
+                c = ' ';
+            }
+        }
+
+        std::istringstream iss(line);
+        std::vector<int> row;
+        int x;
+
+        while (iss >> x) {
+            row.push_back(x);
+        }
+
+        if (!row.empty()) {
+            if (row.size() != 6) {
+                throw std::runtime_error("each expert_list row must contain 6 expert ids");
+            }
+            result.push_back(row);
+        }
+    }
+
+    if (result.size() != 27) {
+        throw std::runtime_error("expert_list must contain 27 rows for DeepSeek-V2-Lite");
+    }
+
+    return result;
+}
 
 llama_context::llama_context(
         const llama_model & model,
@@ -107,6 +152,16 @@ llama_context::llama_context(
     cparams.n_attn_heads = params.n_attn_heads;
     cparams.op_offload = params.op_offload;
     cparams.kv_unified = params.kv_unified;
+#ifdef MOE_HIT_RATE
+    std::vector<std::vector<int>> expert_list = load_expert_list("/home/lili-5090/Sean/SmartOrchV2/expert_list.txt");
+
+    moe_expert_stat.init(
+        hparams.n_layer,        // DeepSeek-V2-Lite: 27
+        hparams.n_expert,       // routed experts, usually 64
+        hparams.n_expert_used,  // usually 6
+        expert_list
+    );
+#endif
 
     {
         const char * LLAMA_GRAPH_REUSE_DISABLE = getenv("LLAMA_GRAPH_REUSE_DISABLE");
@@ -768,7 +823,14 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
 
     // the new graph parameters
     // in order to correctly reuse a graph, it's full topology has to be uniquely determined by these parameters
-    const auto gparams = graph_params(res, ubatch, mctx, gtype);
+    auto gparams = graph_params(res, ubatch, mctx, gtype);
+
+#ifdef MOE_HIT_RATE
+    gparams.moe_topk_cb = [this](int il, ggml_tensor * tensor) {
+        this->moe_topk_refs.push_back({ il, tensor });
+    };
+#endif
+
 
     if (!graph_reuse_disable && res->can_reuse(gparams)) {
         //LLAMA_LOG_DEBUG("%s: reusing previous graph\n", __func__);
@@ -780,8 +842,8 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         ggml_backend_sched_reset(sched.get());
         ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
 
-        const auto t_start_us = ggml_time_us();
-
+        // const auto t_start_us = ggml_time_us();
+        // this->moe_topk_refs.clear();
         gf = model.build_graph(gparams);
 
         // LLAMA_LOG_INFO("graph build time: %.3f ms\n", (ggml_time_us() - t_start_us)/1000.0);
@@ -799,7 +861,7 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         }
     }
 
-    const bool is_prefill = ubatch.n_tokens > 1;
+    // const bool is_prefill = ubatch.n_tokens > 1;
     // if (is_prefill) {
     //     LLAMA_LOG_INFO("output compute graph.\n");
     //     ggml_graph_dump_dot(gf, nullptr, "prefill.dot");
@@ -820,6 +882,15 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         ret = status;
         return nullptr;
     }
+#ifdef MOE_HIT_RATE
+    ggml_backend_sched_synchronize(sched.get());
+
+    if (this->moe_expert_stat.enabled) {
+        for (const auto & ref : this->moe_topk_refs) {
+            this->moe_expert_stat.collect_topk_tensor(ref.il, ref.tensor);
+        }
+    }
+#endif
 
 #ifdef LLAMA_OPENCL_KERNEL_LAUNCHES
     uint64_t n_kernel_launch = ggml_opencl_get_kernel_dispatch_count();
@@ -1292,7 +1363,9 @@ int llama_context::decode(const llama_batch & batch_inp) {
             }
         }
     }
-
+#ifdef MOE_HIT_RATE
+    moe_expert_stat.print(stderr);
+#endif
     // wait for the computation to finish (automatically done when obtaining the model output)
     //synchronize();
 
@@ -2336,6 +2409,7 @@ llama_context_params llama_context_default_params() {
         /*.op_offload                  =*/ true,
         /*.swa_full                    =*/ true,
         /*.kv_unified                  =*/ false,
+        /*.n_attn_heads                =*/ 0,
     };
 
     return result;

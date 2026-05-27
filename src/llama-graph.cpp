@@ -591,7 +591,11 @@ llm_graph_context::llm_graph_context(const llm_graph_params & params) :
     cb_func          (params.cb),
     res              (params.res),
     ctx0             (res->get_ctx()),
-    gf               (res->get_gf()) {
+    gf               (res->get_gf())
+#ifdef MOE_HIT_RATE
+    ,moe_topk_cb(params.moe_topk_cb)
+#endif
+    {
         res->set_params(params);
     }
 
@@ -1000,8 +1004,13 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     // }
 
     ggml_tensor * selected_experts = ggml_top_k(ctx0, selection_probs, n_expert_used); // [n_expert_used, n_tokens]
-    // const int32_t expert_ids[] = {8, 57, 43, 7, 4, 20};
-    // ggml_tensor * selected_experts = ggml_top_k_select(ctx0, selection_probs, expert_ids, n_expert_used);
+
+#ifdef MOE_HIT_RATE
+    if (moe_topk_cb) {
+        moe_topk_cb(il, selected_experts);
+    }
+#endif
+
     cb(selected_experts->src[0], "ffn_moe_argsort", il);
     cb(selected_experts, "ffn_moe_topk", il);
 #ifdef LLAMA_BACK_CPU

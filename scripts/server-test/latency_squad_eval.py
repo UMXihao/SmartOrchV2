@@ -53,7 +53,7 @@ for i in tqdm(range(10)):
 
     # 构造输入文本
     input_text = f"Context: {context}\nQuestion: {question}\nAnswer: "
-    data = {"prompt": input_text, "n_predict": 128, "stop": "\n"}
+    data = {"prompt": input_text, "n_predict": 10, "stop": "\n"}
 
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
