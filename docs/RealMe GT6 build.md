@@ -248,10 +248,16 @@ LD_LIBRARY_PATH=lib ./bin/llama-cli -m ../models/deepseek-v2-lite-chat-q4_0.gguf
 
 LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080
 
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../../gguf/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080
+
 LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --override-kv deepseek2.expert_used_count=int:4 --host 0.0.0.0 --port 8080
 
 LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --override-kv deepseek2.expert_used_count=int:2 --host 0.0.0.0 --port 8080
 
+
+--override-kv qwen2moe.expert_used_count=int:1
+
+--override-kv phimoe.expert_used_count=int:2
 - computer
 
 adb forward tcp:8080 tcp:8080
