@@ -37,7 +37,7 @@ def build_prompt(messages):
     return prompt
 
 
-def call_model(prompt, n_predict=1024):
+def call_model(prompt, n_predict=10):
     data = {
         "prompt": prompt,
         "n_predict": n_predict,

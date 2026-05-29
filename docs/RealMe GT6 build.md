@@ -314,6 +314,12 @@ LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.g
 
 # MoE-Infinity
 LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 \
---moe-n-slots 16 \
+--moe-n-slots 1 \
 --moe-n-layers 999 \
 --override-tensor '.*ffn_.*_exps.*=CPU'
+
+# Termux + Vulkan implementation Mali GPU
+ggml_opencl: device: 'Mali-G925-Immortalis MC12 r0p1 (OpenCL 3.0 v1.r49p1-03bet0.4505ac1771886c7c25f13653ad4cdff7)'
+Unsupported GPU: Mali-G925-Immortalis MC12 r0p1
+
+# Phi skip layer based on latest llama.cpp[phimoe]
