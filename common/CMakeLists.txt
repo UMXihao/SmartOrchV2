@@ -73,6 +73,8 @@ add_library(${TARGET} STATIC
     sampling.h
     speculative.cpp
     speculative.h
+    deepseek2-prof.cpp
+    deepseek2-prof.h
     )
 
 if (BUILD_SHARED_LIBS)

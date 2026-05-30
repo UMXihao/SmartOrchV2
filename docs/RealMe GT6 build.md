@@ -309,7 +309,10 @@ cmake --install build-android --prefix token-stat/ --config Release
 ./build/bin/llama-server -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0 -sl 27
 
 # MoE-Offloading
-LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 \
+LLAMA_DEEPSEEK2_PROFILE=1 \
+LLAMA_DEEPSEEK2_PROFILE_SYNC=1 \
+LLAMA_DEEPSEEK2_PROFILE_DUMP_EVERY=512 \
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 -ah 0\
 -ncmoe 2
 
 # MoE-Infinity
@@ -323,3 +326,13 @@ ggml_opencl: device: 'Mali-G925-Immortalis MC12 r0p1 (OpenCL 3.0 v1.r49p1-03bet0
 Unsupported GPU: Mali-G925-Immortalis MC12 r0p1
 
 # Phi skip layer based on latest llama.cpp[phimoe]
+LLAMA_DEEPSEEK2_PROFILE=1 \
+LLAMA_DEEPSEEK2_PROFILE_SYNC=1 \
+LLAMA_DEEPSEEK2_PROFILE_DUMP_EVERY=512 \
+./build/bin/llama-server -m ../llama.cpp/models/deepseek-v2-lite-chat-q4_0.gguf --attn-heads 0
+
+# attn ffn execution latency profiling
+LLAMA_DEEPSEEK2_PROFILE=1 \
+LLAMA_DEEPSEEK2_PROFILE_SYNC=1 \
+LLAMA_DEEPSEEK2_PROFILE_DUMP_EVERY=512 \
+LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 -ah 0

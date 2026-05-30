@@ -60,6 +60,9 @@
 #pragma warning(disable: 4244 4267) // possible loss of data
 #endif
 
+#include "deepseek2-prof.h"
+#include <cstdlib>
+
 //
 // CPU utils
 //
@@ -1189,6 +1192,8 @@ struct llama_model_params common_model_params_to_llama(common_params & params) {
     return mparams;
 }
 
+static ds2_prof_state g_ds2_prof;
+
 struct llama_context_params common_context_params_to_llama(const common_params & params) {
     auto cparams = llama_context_default_params();
 
@@ -1222,6 +1227,15 @@ struct llama_context_params common_context_params_to_llama(const common_params &
     cparams.type_k = params.cache_type_k;
     cparams.type_v = params.cache_type_v;
     cparams.n_attn_heads = params.n_attn_heads;
+    if (std::getenv("LLAMA_DEEPSEEK2_PROFILE") != nullptr) {
+        const char * every = std::getenv("LLAMA_DEEPSEEK2_PROFILE_DUMP_EVERY");
+        if (every != nullptr) {
+            g_ds2_prof.dump_every = std::strtoull(every, nullptr, 10);
+        }
+
+        cparams.cb_eval = llama_deepseek2_prof_cb;
+        cparams.cb_eval_user_data = &g_ds2_prof;
+    }
     return cparams;
 }
 

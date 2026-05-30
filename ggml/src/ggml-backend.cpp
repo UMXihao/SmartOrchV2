@@ -26,7 +26,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
-
+#include <cstdlib>
 
 // backend buffer type
 
@@ -1584,8 +1584,18 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
                 // TODO: pass backend to the callback, then the user can decide if they want to synchronize
                 ggml_backend_synchronize(split_backend);
 
-                if (need && !sched->callback_eval(t, false, sched->callback_eval_user_data)) {
-                    break;
+                // if (need && !sched->callback_eval(t, false, sched->callback_eval_user_data)) {
+                //     break;
+                // }
+
+                if (need) {
+                    if (std::getenv("LLAMA_DEEPSEEK2_PROFILE_SYNC") != nullptr) {
+                        ggml_backend_synchronize(split_backend);
+                    }
+
+                    if (!sched->callback_eval(t, false, sched->callback_eval_user_data)) {
+                        break;
+                    }
                 }
 
                 j0 = j1;

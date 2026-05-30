@@ -4,6 +4,19 @@
 
 llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_graph_params & params) :
     llm_graph_context(params) {
+    const bool ds2_prof = std::getenv("LLAMA_DEEPSEEK2_PROFILE") != nullptr;
+
+    auto ds2_prof_mark = [&](ggml_tensor * x, const char * name, int il) -> ggml_tensor * {
+        if (!ds2_prof || x == nullptr) {
+            return x;
+        }
+
+        // DeepSeek2 主干这里基本都是 {n_embd, n_tokens}，reshape 是低开销边界标记。
+        ggml_tensor * y = ggml_reshape_2d(ctx0, x, x->ne[0], x->ne[1]);
+        cb(y, name, il);
+        return y;
+    };
+
     bool is_lite = (hparams.n_layer == 27);
 
     const bool is_mla = (hparams.n_embd_head_k_mla != 0 && hparams.n_embd_head_v_mla != 0);
@@ -71,7 +84,7 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
         // norm
         cur = build_norm(inpL, model.layers[il].attn_norm, NULL, LLM_NORM_RMS, il);
         cb(cur, "attn_norm", il);
-
+        cur = ds2_prof_mark(cur, "ds2_attn_start", il);
         // self_attention
         {
             ggml_tensor * q = NULL;
@@ -160,6 +173,7 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
                 cur = build_attn(inp_attn,
                         model.layers[il].wo, NULL,
                         Qcur, Kcur, Vcur, nullptr, nullptr, model.layers[il].wv_b, kq_scale, il);
+                cur = ds2_prof_mark(cur, "ds2_attn_end", il);
             } else {
                 ggml_tensor * kv = ggml_mul_mat(ctx0, model.layers[il].wkv_b, kv_cmpr);
                 cb(kv, "kv", il);
@@ -192,6 +206,7 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
                 cur = build_attn(inp_attn,
                             model.layers[il].wo, NULL,
                             Qcur, Kcur, Vcur, nullptr, nullptr, nullptr, kq_scale, il);
+                cur = ds2_prof_mark(cur, "ds2_attn_end", il);
             }
         }
         // Gather output tokens only after the last layer that is actually executed.
@@ -215,6 +230,8 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
                 NULL, LLM_FFN_SILU, LLM_FFN_PAR, il);
             cb(cur, "ffn_out", il);
         } else {
+            cur = ds2_prof_mark(cur, "ds2_expert_total_start", il);
+            cur = ds2_prof_mark(cur, "ds2_moe_start", il);
             // MoE branch
             ggml_tensor * moe_out = build_moe_ffn(cur,
                 model.layers[il].ffn_gate_inp,
@@ -229,18 +246,23 @@ llm_build_deepseek2::llm_build_deepseek2(const llama_model & model, const llm_gr
                 il);
             cb(moe_out, "ffn_moe_out", il);
 
+            moe_out = ds2_prof_mark(moe_out, "ds2_moe_end", il);
             // FFN shared expert
             {
+                cur = ds2_prof_mark(cur, "ds2_shexp_start", il);
                 ggml_tensor * ffn_shexp =
                     build_ffn(cur,
                         model.layers[il].ffn_up_shexp, NULL, NULL,
                         model.layers[il].ffn_gate_shexp, NULL, NULL,
                         model.layers[il].ffn_down_shexp, NULL, NULL,
                         NULL, LLM_FFN_SILU, LLM_FFN_PAR, il);
+                ffn_shexp = ds2_prof_mark(ffn_shexp, "ds2_shexp_end", il);
+
                 cb(ffn_shexp, "ffn_shexp", il);
 
                 cur = ggml_add(ctx0, moe_out, ffn_shexp);
                 cb(cur, "ffn_out", il);
+                cur = ds2_prof_mark(cur, "ds2_expert_total_end", il);
             }
         }
         cur = ggml_add(ctx0, cur, ffn_inp);
