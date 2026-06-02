@@ -324,6 +324,7 @@ LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.g
 # Termux + Vulkan implementation Mali GPU
 ggml_opencl: device: 'Mali-G925-Immortalis MC12 r0p1 (OpenCL 3.0 v1.r49p1-03bet0.4505ac1771886c7c25f13653ad4cdff7)'
 Unsupported GPU: Mali-G925-Immortalis MC12 r0p1
+QUALCOMM Adreno(TM) 840 (OpenCL 3.0 Adreno(TM) 840)
 
 # Phi skip layer based on latest llama.cpp[phimoe]
 LLAMA_DEEPSEEK2_PROFILE=1 \
@@ -336,3 +337,7 @@ LLAMA_DEEPSEEK2_PROFILE=1 \
 LLAMA_DEEPSEEK2_PROFILE_SYNC=1 \
 LLAMA_DEEPSEEK2_PROFILE_DUMP_EVERY=512 \
 LD_LIBRARY_PATH=lib ./bin/llama-server -m ../models/deepseek-v2-lite-chat-q4_0.gguf -c 4096 --host 0.0.0.0 --port 8080 -ah 0
+
+# MOE_HIT_RATE
+cmake -B build -DGGML_CUDA=ON -DCMAKE_CXX_FLAGS="-DMOE_HIT_RATE"
+cmake --build build --config Release -j 22
