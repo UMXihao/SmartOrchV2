@@ -63,9 +63,9 @@ def call_model(prompt, n_predict=10):
 
 with open(ANSWER_FILE, "w", encoding="utf-8") as fout:
     # 先跑 10 条验证流程
-    for i in tqdm(range(10)):
+    # for i in tqdm(range(10)):
     # 跑完整 MT-Bench
-    # for i in tqdm(range(len(mtbench))):
+    for i in tqdm(range(len(mtbench))):
         item = mtbench[i]
         question_id = item["question_id"]
         category = item.get("category", "")

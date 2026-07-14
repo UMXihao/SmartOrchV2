@@ -70,7 +70,7 @@ source = read_json_or_jsonl("my-local-model_mtbench_answer.jsonl")
 
 judge = read_json_or_jsonl("mtbench_judge_details.jsonl")
 
-for i in tqdm(range(10)):
+for i in tqdm(range(80)):
     turns = source[i]["choices"][0]["turns"]
     predict = "".join(turns)
     reference_summary = judge[i]["judge_output"]

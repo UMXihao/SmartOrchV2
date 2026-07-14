@@ -21,7 +21,7 @@ predictions = []
 references = []
 
 # 可先小规模测试，确认流程无误
-max_samples = 10
+max_samples = 100
 # max_samples = len(summarization_val)
 
 total_time = 0

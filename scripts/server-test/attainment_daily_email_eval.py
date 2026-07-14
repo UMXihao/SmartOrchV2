@@ -21,11 +21,11 @@ predictions = []
 references = []
 
 # 可先小规模测试，确认流程无误
-max_samples = 10
+max_samples = 100
 # max_samples = len(summarization_val)
 
 total_time = 0
-
+count = 0
 for i in tqdm(range(max_samples)):
     article = summarization_val[i]["article"]
     reference_summary = summarization_val[i]["highlights"]
@@ -69,6 +69,11 @@ for i in tqdm(range(max_samples)):
     )
     predictions = []
     references = []
+    if  results.get("rougeL") > 0.0968:
+        count = count + 1
+    predictions = []
+    references = []
     print("\n===== 推理精度评测结果 =====")
     for k, v in results.items():
         print(f"{k}: {v:.4f}")
+print("count: ", count)

@@ -47,6 +47,17 @@
 
 	let { showCenteredEmpty = false } = $props();
 
+	type ApplicationType = 'Chatbot' | 'Agent' | 'Summarization';
+
+	const applicationOptions: ApplicationType[] = ['Chatbot', 'Agent', 'Summarization'];
+	const applicationStats: Partial<Record<ApplicationType, { head: number; expert: number }>> = {
+		Chatbot: { head: 5, expert: 2 },
+		Summarization: { head: 16, expert: 4 }
+	};
+
+	let selectedApplication = $state<ApplicationType>('Chatbot');
+	let selectedApplicationStats = $derived(applicationStats[selectedApplication]);
+
 	let autoScrollEnabled = $state(true);
 	let chatScrollContainer: HTMLDivElement | undefined = $state();
 	let dragCounter = $state(0);
@@ -272,6 +283,32 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <ChatScreenHeader />
+
+<div class="border-b bg-background px-4 py-3 md:px-6">
+	<div class="mx-auto flex max-w-[48rem] flex-col gap-2">
+		<!--		<label class="text-sm font-medium" for="application-type">Application</label>-->
+		<label class="text-sm font-medium" for="application-type"></label>
+		<label class="text-sm font-medium" for="application-type"></label>
+		<select
+			id="application-type"
+			class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm outline-none focus:ring-2 focus:ring-ring"
+			bind:value={selectedApplication}
+		>
+			{#each applicationOptions as option}
+				<option value={option}>{option}</option>
+			{/each}
+		</select>
+
+		{#if selectedApplicationStats}
+			<div class="text-sm text-muted-foreground">
+				<span class="font-medium text-foreground">head:</span>
+				{selectedApplicationStats.head},
+				<span class="font-medium text-foreground">expert:</span>
+				{selectedApplicationStats.expert}
+			</div>
+		{/if}
+	</div>
+</div>
 
 {#if !isEmpty}
 	<div

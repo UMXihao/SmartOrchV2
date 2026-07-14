@@ -12,7 +12,7 @@ predictions = []
 references = []
 
 count = 0
-for i in tqdm(range(1000)):
+for i in tqdm(range(100)):
 #for i in tqdm(range(len(squad_val))):
     context = squad_val[i]["context"]
     question = squad_val[i]["question"]
@@ -40,5 +40,6 @@ for i in tqdm(range(1000)):
         count = count + 1
     # print(result.get('f1'))
 
-with open("count.txt", "w", encoding="utf-8") as f:
-    f.write(str(count))
+print("count: ", count)
+# with open("count.txt", "w", encoding="utf-8") as f:
+#     f.write(str(count))

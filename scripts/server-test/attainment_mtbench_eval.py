@@ -70,7 +70,8 @@ source = read_json_or_jsonl("my-local-model_mtbench_answer.jsonl")
 
 judge = read_json_or_jsonl("mtbench_judge_details.jsonl")
 
-for i in tqdm(range(10)):
+count = 0
+for i in tqdm(range(80)):
     turns = source[i]["choices"][0]["turns"]
     predict = "".join(turns)
     reference_summary = judge[i]["judge_output"]
@@ -84,8 +85,11 @@ for i in tqdm(range(10)):
         references=references,
         use_stemmer=True
     )
+    if  results.get("rougeL") > 0.1121 :
+        count = count + 1
     predictions = []
     references = []
     print("\n===== 推理精度评测结果 =====")
     for k, v in results.items():
         print(f"{k}: {v:.4f}")
+print("count: ", count)
